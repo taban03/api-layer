@@ -20,6 +20,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.BasicAuth;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
@@ -75,8 +76,7 @@ public class EnablerV2SpringFoxConfig {
         if (apiInfo.getGroupName() != null && !apiInfo.getGroupName().isEmpty()) {
             groupName = apiInfo.getGroupName();
         }
-        List<SecurityScheme> schemeList = new ArrayList<>();
-        schemeList.add(new BasicAuth("LoginBasicAuth"));
+        List<SecurityScheme> schemeList = getSecuritySchemes();
         if (apiInfo.getBasePackage() == null && apiInfo.getApiPattern() == null) {
             return new Docket(DocumentationType.SWAGGER_2)
                 .select()
@@ -131,5 +131,13 @@ public class EnablerV2SpringFoxConfig {
             log.error(msg, t);
             throw t;
         }
+    }
+
+    private List<SecurityScheme> getSecuritySchemes() {
+        List<SecurityScheme> schemeList = new ArrayList<>();
+        schemeList.add(new BasicAuth("LoginBasicAuth"));
+        schemeList.add(new ApiKey("Bearer", "Authorization", "header"));
+        schemeList.add(new ApiKey("Set-cookie", "apimlAuthenticationToken", "header"));
+        return schemeList;
     }
 }
