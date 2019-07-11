@@ -36,12 +36,13 @@
         "redux-thunk": "2.3.0",
         "rxjs": "6.3.3",
         "swagger-ui": "^3.23.1",
+        "swagger-ui-react": "^3.23.0",
         "uuid": "3.3.2"
     },
     "scripts": {
         "start": "cross-env HTTPS=true react-scripts start",
         "start:dev": "concurrently -c blue,green -n Backend,UI \"npm run start:mocked-backend\" \"cross-env REACT_APP_GATEWAY_URL=http://localhost:8000 npm run start\"",
-        "start:mocked-backend": "cross-env REACT_APP_GATEWAY_URL=http://localhost:8000 nodemon mocked-backend/server.js",
+        "start:mock": "cross-env REACT_APP_GATEWAY_URL=http://localhost:8000 nodemon mocked-backend/server.js",
         "build": "react-scripts build",
         "analyze": "source-map-explorer build/static/js/main.*",
         "postbuild": "rimraf build/**/*.map",

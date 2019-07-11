@@ -13,8 +13,7 @@ import com.ca.mfaas.apicatalog.exceptions.ContainerStatusRetrievalException;
 import com.ca.mfaas.apicatalog.model.APIContainer;
 import com.ca.mfaas.apicatalog.services.cached.CachedApiDocService;
 import com.ca.mfaas.apicatalog.services.cached.CachedProductFamilyService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -65,7 +64,8 @@ public class ApiCatalogController {
      */
     @GetMapping(value = "/containers", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Lists catalog dashboard tiles",
-        notes = "Returns a list of tiles including status and tile description"
+        notes = "Returns a list of tiles including status and tile description",
+        authorizations = {@Authorization(value = "LoginBasicAuth")}
     )
     public ResponseEntity<List<APIContainer>> getAllAPIContainers() throws ContainerStatusRetrievalException {
         try {
@@ -91,7 +91,8 @@ public class ApiCatalogController {
      */
     @GetMapping(value = "/containers/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Retrieves a specific dashboard tile information",
-        notes = "Returns information for a specific tile {id} including status and tile description"
+        notes = "Returns information for a specific tile {id} including status and tile description",
+        authorizations = {@Authorization(value = "LoginBasicAuth")}
     )
     public ResponseEntity<List<APIContainer>> getAPIContainerById(@PathVariable(value = "id") String id) throws ContainerStatusRetrievalException {
         try {
