@@ -1,22 +1,32 @@
 serviceId: discoplug
 title: Discoverable service as (API ML GW) Plugin
 description: POC for REST API service as API ML GW plugin extension
+
 baseUrl: http://localhost:10022/discoplug
 homePageRelativeUrl: /
 statusPageRelativeUrl: /application/info
 healthCheckRelativeUrl: /application/health
+
+eureka:
+    hostname: localhost
+    ipAddress: 127.0.0.1
+    port: 10021
+
 discoveryServiceUrls:
     - http://eureka:password@localhost:10011/eureka
     - http://eureka:password@localhost:10011/eureka
+
 routes:
     - gatewayUrl: api/v1
       serviceUrl: /discoplug/api/v1
     - gatewayUrl: api/v1/api-doc
       serviceUrl: /discoplug/api-doc
+
 apiInfo:
     - apiId: org.zowe.apiml.discoplug
       gatewayUrl: api/v1
       swaggerUrl: http://localhost:10022/discoplug/api-doc
+
 catalogUiTile:
         id: discoplug
         title: Discoverable service as (API ML GW) Plugin
@@ -34,3 +44,4 @@ ssl:
     trustStore: ../keystore/localhost/localhost.truststore.p12
     trustStorePassword: password
     trustStoreType: PKCS12
+

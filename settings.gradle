@@ -18,4 +18,5 @@ include 'api-catalog-services'
 include 'api-catalog-ui'
 include 'security-service-client-spring'
 include 'apiml-gateway-plugin-service'
+include 'apiml-plugin-poc'
 

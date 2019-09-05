@@ -1,0 +1,92 @@
+//test.onlyIf { ! Boolean.getBoolean('${skip.tests}') }
+
+buildscript {
+    /*ON_BOARDING-START*/
+    ext {
+        springBootVersion = '2.0.8.RELEASE'
+        springBootGradleVersion =  '2.1.6.RELEASE'
+    }
+    /*ON_BOARDING-END*/
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootGradleVersion}")
+    }
+}
+
+/*ON_BOARDING-START*/
+ext {
+    zoweVersion = '1.1.6'
+    //!!! Put following 4 lines either inside this ext or after plugins apply statements
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    group = 'com.ca.mfaas'
+    appName = 'apiml-enabler-spring-v2-sample'
+    version = '0.0.1-SNAPSHOT'
+}
+/*ON_BOARDING-END*/
+
+apply plugin: 'java'
+//apply plugin: 'eclipse'
+//apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+
+bootJar {
+    baseName = "${appName}" //'gs-rest-service'
+    //version =  '0.1.0'
+    /*ON_BOARDING-START*/
+    archiveName = "${baseName}.jar"
+    /*ON_BOARDING-END*/
+}
+
+/*ON_BOARDING-START*/
+bootRun { // Allow for passing to the SB app System properties including -D style properties set in cmd line
+    systemProperties System.properties
+}
+
+jar {
+    enabled = true
+    baseName = "${appName}" //'apiml-enabler-sampleservice-service'
+    archiveName = "${baseName}.thin.jar"
+}
+/*ON_BOARDING-END*/
+
+repositories {
+    mavenCentral()
+
+    /*ON_BOARDING-START*/
+    maven {
+        url zoweArtifactoryMavenSnapshotRepo
+        credentials {
+            username zoweArtifactoryUser
+            password zoweArtifactoryPassword
+        }
+    }
+
+    maven {
+        url zoweArtifactoryMavenRepo
+        credentials {
+            username zoweArtifactoryUser
+            password zoweArtifactoryPassword
+        }
+    }
+    /*ON_BOARDING-END*/
+}
+
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    /*ON_BOARDING-START*/
+    compile("org.springframework.boot:spring-boot-starter")
+    //compile("org.springframework.boot:spring-boot-starter-json")
+    compile("com.ca.mfaas.sdk:mfaas-integration-enabler-spring-v2-springboot-2.0.4.RELEASE:$zoweVersion")
+    //testCompile("junit:junit")                                   // new
+    /*ON_BOARDING-END*/
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('com.jayway.jsonpath:json-path')
+}
+
