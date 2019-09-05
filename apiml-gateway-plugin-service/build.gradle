@@ -1,0 +1,89 @@
+//test.onlyIf { ! Boolean.getBoolean('${skip.tests}') }
+
+buildscript {
+    /*ON_BOARDING-START*/
+    ext {
+        springBootVersion = '2.0.8.RELEASE'
+        springBootGradleVersion =  '2.1.6.RELEASE'
+    }
+    /*ON_BOARDING-END*/
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-tomcat-plugin:2.5'
+    }
+}
+
+/*ON_BOARDING-START*/
+ext {
+    zoweVersion = '1.1.6'
+    //!!! Put following 4 lines either inside this ext or after plugins apply statements
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    group = 'com.ca.mfaas'
+    appName = 'apiml-enabler-spring-v2-sample'
+    version = '0.0.1-SNAPSHOT'
+}
+/*ON_BOARDING-END*/
+
+apply plugin: 'java'
+apply plugin: 'war'
+//apply plugin: 'org.springframework.boot'
+apply plugin: 'com.bmuschko.tomcat'
+//apply plugin: 'io.spring.dependency-management'
+
+jar {
+    enabled = true
+    baseName = "${appName}"
+    archiveName = "${baseName}.thin.jar"
+}
+
+repositories {
+    mavenCentral()
+
+    /*ON_BOARDING-START*/
+    maven {
+        url zoweArtifactoryMavenSnapshotRepo
+        credentials {
+            username zoweArtifactoryUser
+            password zoweArtifactoryPassword
+        }
+    }
+
+    maven {
+        url zoweArtifactoryMavenRepo
+        credentials {
+            username zoweArtifactoryUser
+            password zoweArtifactoryPassword
+        }
+    }
+    /*ON_BOARDING-END*/
+}
+
+
+dependencies {
+    /*ON_BOARDING-START*/
+    compile(project(":integration-enabler-java"))
+
+    compile libraries.spring4Mvc
+    compile libraries.jackson_databind
+    compile libraries.springFox
+    compile libraries.logback_classic
+
+    providedCompile libraries.javax_servlet_api
+
+    /*ON_BOARDING-END*/
+    testCompile libraries.junit
+    testCompile libraries.mockito_core
+    testCompile libraries.spring4Test
+    testCompile libraries.json_path
+
+    def tomcatVersion = '8.5.16'
+    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+        "org.apache.tomcat.embed:tomcat-embed-logging-juli:8.5.2",
+        "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
+}
+

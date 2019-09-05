@@ -1,0 +1,138 @@
+spring:
+  application:
+    name: disco
+
+#apiml:
+#  security:
+#    ssl:
+#      ciphers: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384
+#  # The `apiml` node contains API Mediation Layer specific configuration
+#  service:
+#    # The `apiml.service` node contains information required by any APIML service
+#    id: ${spring.application.name}   # Service ID of this service. It is fixed for APIML Discovery Service
+#    hostname: localhost  # Hostname that is advertised in Eureka. Default is valid only for localhost
+#    port: 10011  # Default port name for discovery service
+#    ipAddress: 127.0.0.1  # IP address that is advertised in Eureka. Default is valid only for localhost
+#    preferIpAddress: false
+#  discovery:
+#    # Not used in HTTPS mode and not applicable for Zowe
+#    # The `apiml.discovery` node contains discovery-service only configuration
+#    userid: eureka  # Userid that Eureka server will use to check authentication of its clients (other services)
+#    password: password  # Password that Eureka server will use to check authentication of its clients (other services)
+#    allPeersUrls: http://${apiml.discovery.userid}:${apiml.discovery.password}@${apiml.service.hostname}:${apiml.service.port}/eureka/
+
+environment:
+  serviceId: disco
+  serviceTitle: Greetings Discoverable Client
+  serviceDescription: The SpringBoot V2 Discoverable Client sample
+  serviceVersion: 0.0.1 # New not available in github documentation
+  discoveryEnabled: true
+  hostname: localhost # usilca3x.lvn.broadcom.net
+  port: 10011
+  discoveryLocations: https://localhost:10011/eureka/ #usilca3x.lvn.broadcom.net
+  ipAddress: 127.0.0.1 # TODO: Q: is it used?
+
+mfaas:
+  discovery:
+    serviceId: ${environment.serviceId}
+    locations: ${environment.discoveryLocations} #https://${apiml.service.hostname}:${apiml.service.port}/eureka/
+    enabled: true
+    endpoints:
+      statusPage: ${mfaas.server.scheme}://${mfaas.service.hostname}:${mfaas.server.port}${mfaas.server.contextPath}/info
+      healthPage: ${mfaas.server.scheme}://${mfaas.service.hostname}:${mfaas.server.port}${mfaas.server.contextPath}/health
+      homePage:
+    info:
+      serviceTitle:  ${environment.serviceTitle}
+      description:  ${environment.serviceDescription}
+    fetchRegistry: false
+    region: default
+  service:
+    hostname: ${environment.hostname} # localhost
+    ipAddress: 127.0.0.1 # TODO: Q: Is it used?
+  catalog-ui-tile:
+    id: ${environment.serviceId} #CaSampleRestApplication
+    title: ${environment.serviceTitle} #SDK Applications
+    description: ${environment.serviceDescription} # Sample REST API Applications
+    version: ${environment.serviceVersion} # 0.0.1
+  server:
+    scheme: https
+    port: 20017
+    contextPath: /${environment.serviceId}
+  security:
+    sslEnabled: true
+    protocol: TLSv1.2
+    ciphers: TLS_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384,TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_EMPTY_RENEGOTIATION_INFO_SCSV
+    keyAlias: localhost
+    keyPassword: password
+    keyStore: ../keystore/localhost/localhost.keystore.p12   #/apiml.keystore.p12
+    keyStoreType: PKCS12
+    keyStorePassword: password
+    trustStore: ../keystore/localhost/localhost.truststore.p12
+    trustStoreType: PKCS12
+    trustStorePassword: password
+
+eureka:
+  instance:
+    appname: ${mfaas.discovery.serviceId}
+    hostname: ${mfaas.service.hostname}
+    statusPageUrlPath: ${mfaas.discovery.endpoints.statusPage}
+    healthCheckUrl: ${mfaas.discovery.endpoints.healthPage}
+    homePageUrl: ${mfaas.discovery.endpoints.homePage}
+    secureHealthCheckUrl: ${mfaas.discovery.endpoints.healthPage}
+    nonSecurePort: ${mfaas.server.port}
+    securePort: ${mfaas.server.port}
+    securePortEnabled: ${mfaas.security.sslEnabled}
+    nonSecurePortEnabled: false  # OBSOLETE - REMOVE
+    metadata-map:
+      
+      routed-services:
+        api-v1:
+          gateway-url: "api/v1/"
+          service-url: ${mfaas.server.contextPath}/api/v1
+        api-doc:
+          gateway-url: "api/v1/api-doc"
+          service-url: ${mfaas.server.contextPath}/api-doc
+      mfaas:
+        api-info:
+          apiVersionProperties:
+            v1:
+              title: Sample API
+              description: Sample RESTful API services discoverable in the API Mediation Layer
+              version: 0.0.1
+              basePackage: com.ca.mfaas.sampleservice.api.v1
+              # apiPattern: /api/v1/.*
+        discovery:
+          catalogUiTile:
+            id: ${mfaas.catalog-ui-tile.id}
+            title:  ${mfaas.catalog-ui-tile.title}
+            description: ${mfaas.catalog-ui-tile.description}
+            version: ${mfaas.catalog-ui-tile.version}
+          enableApiDoc: ${mfaas.discovery.info.enableApiDoc:true}
+          service:
+            title: ${mfaas.discovery.info.serviceTitle}
+            description: ${mfaas.discovery.info.description}
+  client:
+    enabled: ${mfaas.discovery.enabled}
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: ${mfaas.discovery.locations}
+    fetchRegistry:  ${mfaas.discovery.fetchRegistry}
+    region: ${mfaas.discovery.region}
+
+server:
+  port: ${mfaas.server.port}
+  servlet:
+    contextPath: ${mfaas.server.contextPath}
+  ssl:
+    enabled: ${mfaas.security.sslEnabled}
+    protocol: ${mfaas.security.protocol}
+    ciphers: ${mfaas.security.ciphers}
+    keyStore: ${mfaas.security.keyStore}
+    keyAlias: ${mfaas.security.keyAlias}
+    keyPassword: ${mfaas.security.keyPassword}
+    keyStorePassword: ${mfaas.security.keyStorePassword}
+    keyStoreType: ${mfaas.security.keyStoreType}
+    trustStore: ${mfaas.security.trustStore}
+    trustStoreType: ${mfaas.security.trustStoreType}
+    trustStorePassword: ${mfaas.security.trustStorePassword}
