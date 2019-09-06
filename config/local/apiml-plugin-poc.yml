@@ -1,0 +1,54 @@
+spring.profiles.include: diag
+
+environment:
+    serviceId: DISCO-PLUG
+    serviceTitle: API-ML Plugins PoC
+    serviceDescription: Sample Spring Boot 2.x REST API Service - demonstrating APIML Plugin concept
+    discoveryEnabled: true
+    hostname: localhost
+    port: 10035
+    discoveryLocations: https://localhost:10011/eureka/
+    ipAddress: 127.0.0.1
+
+spring:
+    output:
+        ansi:
+            enabled: always
+
+server:
+    ssl:
+        enabled: false
+        keyAlias: localhost
+        keyPassword: password
+        keyStore: keystore/localhost/localhost.keystore.p12
+        keyStorePassword: password
+        keyStoreType: PKCS12
+        trustStore: keystore/localhost/localhost.truststore.p12
+        trustStorePassword: password
+        trustStoreType: PKCS12
+
+
+eureka:
+    instance:
+        metadata-map:
+            mfaas:
+                plugin:
+                    extending: security # logging or request pre-processing
+                    order: 1 # -1 last, 0 - doesn't matter
+                    end-point:
+                        destination: validate/*
+                        input:
+                            payload: false
+                            headers: true
+                            authorization: false;
+                            path: true
+                            protocol: true
+                            query: true
+                        output:
+                            headers:
+                                - X-APIML-PLUGIN-HEADER1
+                                - X-APIML-PLUGIN-HEADER2
+                            data:
+                                operation: delete # add, replace
+                                value: $string
+                        errors: 

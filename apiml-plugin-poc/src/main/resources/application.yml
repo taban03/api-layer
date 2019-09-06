@@ -22,13 +22,14 @@ spring:
 #    allPeersUrls: http://${apiml.discovery.userid}:${apiml.discovery.password}@${apiml.service.hostname}:${apiml.service.port}/eureka/
 
 environment:
+  pluginCategory: plugins
   serviceId: disco-plug
   serviceTitle: Discoverable Plugin
   serviceDescription: The Discoverable API-ML Plugomn sample
   serviceVersion: 0.0.1 # New not available in github documentation
   discoveryEnabled: true
   hostname: localhost # usilca3x.lvn.broadcom.net
-  port: 10011
+  port: 10031
   discoveryLocations: https://localhost:10011/eureka/ #usilca3x.lvn.broadcom.net
   ipAddress: 127.0.0.1 # TODO: Q: is it used?
 
@@ -50,13 +51,13 @@ mfaas:
     hostname: ${environment.hostname} # localhost
     ipAddress: 127.0.0.1 # TODO: Q: Is it used?
   catalog-ui-tile:
-    id: ${environment.serviceId} #CaSampleRestApplication
+    id: ${environment.pluginCategory} #CaSampleRestApplication
     title: ${environment.serviceTitle} #SDK Applications
     description: ${environment.serviceDescription} # Sample REST API Applications
     version: ${environment.serviceVersion} # 0.0.1
   server:
     scheme: https
-    port: 20017
+    port: 20027
     contextPath: /${environment.serviceId}
   security:
     sslEnabled: true
@@ -64,10 +65,10 @@ mfaas:
     ciphers: TLS_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384,TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_EMPTY_RENEGOTIATION_INFO_SCSV
     keyAlias: localhost
     keyPassword: password
-    keyStore: ../keystore/localhost/localhost.keystore.p12   #/apiml.keystore.p12
+    keyStore: keystore/localhost/localhost.keystore.p12   #/apiml.keystore.p12
     keyStoreType: PKCS12
     keyStorePassword: password
-    trustStore: ../keystore/localhost/localhost.truststore.p12
+    trustStore: keystore/localhost/localhost.truststore.p12
     trustStoreType: PKCS12
     trustStorePassword: password
 
@@ -110,6 +111,42 @@ eureka:
           service:
             title: ${mfaas.discovery.info.serviceTitle}
             description: ${mfaas.discovery.info.description}
+
+        plugin:
+          end-points:
+            end-point1:
+              input:
+                payload: false
+                headers: true
+                authorization: false;
+                path: true
+                protocol: true
+                query: true
+              output:
+                headers:
+                  - X-APIML-PLUGIN-HEADER1
+                  - X-APIML-PLUGIN-HEADER2
+                data:
+                  operation: delete # add, replace
+                  value: $string
+                errors:
+            end-point2:
+              input: # input values form a map provided in JSON payload to the plugin endpoint
+                payload: true
+                headers: true
+                authorization: true;
+                path: false
+                protocol: true
+                query: false
+              output:
+                headers:
+                  - X-APIML-PLUGIN-HEADER3
+                  - X-APIML-PLUGIN-HEADER4
+                data:
+                  operation: add # add, replace
+                  value: $string
+                errors:
+
   client:
     enabled: ${mfaas.discovery.enabled}
     healthcheck:

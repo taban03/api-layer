@@ -23,8 +23,8 @@ ext {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
     group = 'com.ca.mfaas'
-    appName = 'apiml-enabler-spring-v2-sample'
-    version = '0.0.1-SNAPSHOT'
+    appName = 'apiml-plugin-poc'
+    version = '0.0.2-SNAPSHOT'
 }
 /*ON_BOARDING-END*/
 

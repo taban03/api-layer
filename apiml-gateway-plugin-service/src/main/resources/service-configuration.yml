@@ -14,7 +14,6 @@ eureka:
 
 discoveryServiceUrls:
     - http://eureka:password@localhost:10011/eureka
-    - http://eureka:password@localhost:10011/eureka
 
 routes:
     - gatewayUrl: api/v1
