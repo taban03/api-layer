@@ -28,3 +28,10 @@ server:
         trustStore: keystore/localhost/localhost.truststore.p12
         trustStorePassword: password
         trustStoreType: PKCS12
+
+zuul:
+    groovyFiltersPath:
+        - filters/groovy/pre
+        - filters/groovy/route
+        - filters/groovy/post
+        - filters/groovy/error

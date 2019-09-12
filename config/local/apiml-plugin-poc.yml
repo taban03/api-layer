@@ -33,9 +33,12 @@ eureka:
         metadata-map:
             mfaas:
                 plugin:
-                    extending: security # logging or request pre-processing
-                    order: 1 # -1 last, 0 - doesn't matter
-                    end-point:
+                    inbound: true # or outbound
+                    async: false
+                    extension-point: security # aka Type in Zool: most often defines the stage during the routing flow when the Filter will be applied (although it can be any custom string). One extension point allowed. Others points: logging, request pre-processing
+                    exec-order: 1 # 1- first, 0 last; Subsequent replaces previous
+                    criteria:
+                    end-point: # One end point allowed  to be called in the processing chain gor given extension point
                         destination: validate/*
                         input:
                             payload: false
@@ -45,10 +48,14 @@ eureka:
                             protocol: true
                             query: true
                         output:
-                            headers:
+                            headers: # Plugin will provide additional headers values
                                 - X-APIML-PLUGIN-HEADER1
                                 - X-APIML-PLUGIN-HEADER2
-                            data:
+                            data: # Expect plugin to perform an action on input and
                                 operation: delete # add, replace
                                 value: $string
-                        errors: 
+                        errors:
+                            - ES_EP-${Extension_Point-ID}:
+                            - ES_EP-#{}:
+                            -
+

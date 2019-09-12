@@ -10,10 +10,12 @@
 package com.ca.mfaas.gateway.controllers;
 
 import com.ca.apiml.security.common.config.AuthConfigurationProperties;
+import com.ca.mfaas.gateway.filters.GroovyFiltersInitializer;
 import com.ca.mfaas.gateway.security.login.LoginProvider;
 import com.ca.mfaas.product.service.BuildInfo;
 import com.ca.mfaas.product.service.BuildInfoDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Controller;
@@ -42,6 +44,8 @@ public class GatewayHomepageController {
         initializeBuildInfos();
     }
 
+    @Autowired
+    private GroovyFiltersInitializer groovyFiltersInitializer;
 
     @GetMapping("/")
     public String home(Model model) {
