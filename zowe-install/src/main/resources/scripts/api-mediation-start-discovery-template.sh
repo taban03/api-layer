@@ -36,12 +36,12 @@ java -Xms32m -Xmx256m -Xquickstart \
     -Dapiml.discovery.staticApiDefinitionsDirectories=**STATIC_DEF_CONFIG** \
     -Dapiml.security.ssl.verifySslCertificatesOfServices=**VERIFY_CERTIFICATES** \
     -Dserver.ssl.enabled=true \
-    -Dserver.ssl.keyStore=$DIR/../keystore/localhost/localhost.keystore.p12 \
+    -Dserver.ssl.keyStore=$DIR/../../keystore/localhost/localhost.keystore.p12 \
     -Dserver.ssl.keyStoreType=PKCS12 \
     -Dserver.ssl.keyStorePassword=password \
     -Dserver.ssl.keyAlias=localhost \
     -Dserver.ssl.keyPassword=password \
-    -Dserver.ssl.trustStore=$DIR/../keystore/localhost/localhost.truststore.p12 \
+    -Dserver.ssl.trustStore=$DIR/../../keystore/localhost/localhost.truststore.p12 \
     -Dserver.ssl.trustStoreType=PKCS12 \
     -Dserver.ssl.trustStorePassword=password \
     -Djava.protocol.handler.pkgs=com.ibm.crypto.provider \
