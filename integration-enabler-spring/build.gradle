@@ -1,0 +1,34 @@
+configurations {
+    compile.transitive = true
+
+    spring1 {
+        description = 'compile configuration with Spring 1.x'
+        extendsFrom compile
+    }
+
+    spring2 {
+        description = 'compile configuration with Spring 2.x'
+        extendsFrom compile
+    }
+}
+
+task('spring1Jar', type: Jar) {
+    from configurations.spring1
+    baseName = "$project.name-$configurations.spring1.name"
+}
+
+task('spring2Jar', type: Jar) {
+    from configurations.spring2
+    baseName = "$project.name-$configurations.spring2.name"
+}
+
+jar.dependsOn spring1Jar, spring2Jar
+
+dependencies {
+    implementation(project(':integration-enabler-java'))
+
+    spring1 libraries.spring_boot_starter1
+    spring2 libraries.spring_boot_starter
+
+    annotationProcessor libraries.lombok
+}

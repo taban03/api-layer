@@ -9,9 +9,9 @@
  */
 package com.ca.mfaas.apicatalog;
 
+import com.ca.mfaas.buildinfo.BuildInfo;
 import com.ca.mfaas.enable.EnableApiDiscovery;
 import com.ca.mfaas.product.monitoring.LatencyUtilsConfigInitializer;
-import com.ca.mfaas.product.service.BuildInfo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;

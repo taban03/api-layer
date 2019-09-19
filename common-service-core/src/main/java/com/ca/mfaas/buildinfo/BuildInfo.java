@@ -7,7 +7,7 @@
  *
  * Copyright Contributors to the Zowe Project.
  */
-package com.ca.mfaas.product.service;
+package com.ca.mfaas.buildinfo;
 
 import lombok.extern.slf4j.Slf4j;
 

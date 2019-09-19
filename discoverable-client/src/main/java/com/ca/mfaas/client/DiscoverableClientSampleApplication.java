@@ -9,29 +9,25 @@
  */
 package com.ca.mfaas.client;
 
-import com.ca.mfaas.enable.EnableApiDiscovery;
-import com.ca.mfaas.product.monitoring.LatencyUtilsConfigInitializer;
-import com.ca.mfaas.product.service.BuildInfo;
-import com.ca.mfaas.product.service.ServiceStartupEventHandler;
+import com.ca.apiml.enable.EnableApiDiscovery;
+import com.ca.mfaas.buildinfo.BuildInfo;
+import com.ca.mfaas.buildinfo.ServiceStartupEventHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cloud.netflix.hystrix.HystrixAutoConfiguration;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
-@SpringBootApplication(exclude = HystrixAutoConfiguration.class)
+@SpringBootApplication
 @EnableApiDiscovery
-@EnableConfigurationProperties
 @EnableWebSocket
-@ComponentScan(value = { "com.ca.mfaas.client", "com.ca.mfaas.enable", "com.ca.mfaas.product.security", "com.ca.mfaas.product.web" })
+@ComponentScan(value = {"com.ca.mfaas.error", "com.ca.mfaas.client"})
 public class DiscoverableClientSampleApplication implements ApplicationListener<ApplicationReadyEvent> {
 
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(DiscoverableClientSampleApplication.class);
-        app.addInitializers(new LatencyUtilsConfigInitializer());
+        System.getProperties().setProperty("LatencyUtils.useActualTime", "false");
         app.setLogStartupInfo(false);
         new BuildInfo().logBuildInfo();
         app.run(args);
@@ -40,6 +36,6 @@ public class DiscoverableClientSampleApplication implements ApplicationListener<
     @Override
     public void onApplicationEvent(final ApplicationReadyEvent event) {
         new ServiceStartupEventHandler().onServiceStartup("Discoverable Client Service",
-                ServiceStartupEventHandler.DEFAULT_DELAY_FACTOR);
+            ServiceStartupEventHandler.DEFAULT_DELAY_FACTOR);
     }
 }

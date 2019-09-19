@@ -7,7 +7,9 @@
  *
  * Copyright Contributors to the Zowe Project.
  */
-package com.ca.mfaas.product.service;
+package com.ca.mfaas.buildinfo;
+
+import lombok.RequiredArgsConstructor;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -15,17 +17,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+@RequiredArgsConstructor
 public class BuildInfoDetails {
-
     private static final String UNKNOWN = "Unknown";
 
     private final Properties build;
     private final Properties git;
-
-    public BuildInfoDetails(Properties build, Properties git) {
-        this.build = build;
-        this.git = git;
-    }
 
     public String getArtifact() {
         return build.get("build.artifact") == null ? UNKNOWN : String.valueOf(build.get("build.artifact"));
