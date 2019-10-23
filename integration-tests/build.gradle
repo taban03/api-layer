@@ -137,4 +137,8 @@ task runAllIntegrationTests(type: Test) {
         )
     }
     outputs.upToDateWhen { false }
+
+    if (System.getProperty('DEBUG', 'false') == 'true') {
+        jvmArgs '-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=9099'
+    }
 }

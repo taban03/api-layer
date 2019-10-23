@@ -58,6 +58,13 @@ public class ApiMediationClientImpl implements ApiMediationClient {
         }
     }
 
+    /**
+     * TODO: Improve plain java enabler: Make eurekaClient initialization and registration optional and TLS switchable on/off
+     * @param applicationInfoManager
+     * @param clientConfig
+     * @param config
+     * @return
+     */
     private EurekaClient initializeEurekaClient(
         ApplicationInfoManager applicationInfoManager, EurekaClientConfig clientConfig, ApiMediationServiceConfig config) {
 

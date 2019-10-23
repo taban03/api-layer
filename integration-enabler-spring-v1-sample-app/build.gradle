@@ -1,4 +1,17 @@
 buildscript {
+    repositories mavenRepositories
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:${gradleGitPropertiesVersion}")
+    }
+}
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.gorylenko.gradle-git-properties'
+
+/*
+buildscript {
     ext {
         springBootVersion = "1.5.9.RELEASE"
         springCloudVersion = "1.4.0.RELEASE"
@@ -20,33 +33,57 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.springframework.boot'
+*/
 
+/*
 springBoot {
     executable = true
 }
+*/
 
+/*
 jar {
     baseName = "enabler-springboot-${springBootVersion}-sample"
     archiveName = "${baseName}.jar"
 }
+*/
 
+/*
 repositories {
     mavenCentral()
     maven { url "http://repo.spring.io/libs-milestone" }
 }
+*/
 
 dependencies {
+    compile(project(':common-service-core'))
+    compile(project(':apiml-common'))
     compile(project(':integration-enabler-spring-v1'))
-    compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
-    compile "org.springframework.cloud:spring-cloud-starter-eureka:${springCloudVersion}"
-    compile "io.springfox:springfox-swagger2:2.7.0"
-    compile "io.springfox:springfox-spring-web:2.7.0"
+
+    //compile(project(':security-service-client-spring'))
+
 
     compileOnly libraries.lombok
 
-    testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    compile libraries.spring_boot_starter_web
+    compile libraries.spring_boot_starter_actuator
+    compile libraries.spring_boot_configuration_processor
+    compile libraries.spring_cloud_starter_eureka
+    compile libraries.spring_boot_starter_webflux
+    compile libraries.spring_retry
+    compile libraries.swagger_core
+    compile libraries.json_path
+    compile libraries.apache_commons_lang3
+    compile libraries.spring_boot_starter_thymeleaf
+    compile libraries.apache_velocity
+
+    testCompile libraries.rest_assured
+    testCompile libraries.spring_mock_mvc
+    testCompile libraries.lombok
+    testCompile libraries.spring_boot_starter_test
 }
 
+bootJar.archiveName = "${bootJar.baseName}.jar"
 
 bootRun {
     if (project.hasProperty('args')) {

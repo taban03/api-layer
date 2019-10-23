@@ -10,6 +10,8 @@ spring:
         client:
             hostname: ${environment.hostname}
             ipAddress: ${environment.ipAddress}
+        discovery:
+            enabled: true
     mvc:
         throw-exception-if-no-handler-found: true
     output:
@@ -141,6 +143,7 @@ eureka:
                         title: ${mfaas.discovery.info.serviceTitle}
                         description: ${mfaas.discovery.info.description}
     client:
+        enabled: true
         healthcheck:
             enabled: true
         serviceUrl:

@@ -96,3 +96,6 @@ server:
     port: ${mfaas.server.port}
     context-path: ${mfaas.server.contextPath}
 
+---
+spring:
+    profiles: diag

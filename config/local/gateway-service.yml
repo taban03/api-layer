@@ -7,8 +7,8 @@ apiml:
         discoveryServiceUrls: https://localhost:10011/eureka/
     security:
         auth:
-            provider: dummy
-            zosmfServiceId: zosmf  # Replace me with the correct z/OSMF service id
+            provider: zosmf
+            zosmfServiceId: zosmfca32  # Replace me with the correct z/OSMF service id
         ssl:
             verifySslCertificatesOfServices: true
     banner: console

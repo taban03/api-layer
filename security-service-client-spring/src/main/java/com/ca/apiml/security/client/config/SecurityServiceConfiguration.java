@@ -13,7 +13,8 @@ import com.ca.mfaas.product.gateway.GatewayClient;
 import com.ca.mfaas.product.gateway.GatewayInstanceInitializer;
 import com.ca.mfaas.product.instance.lookup.InstanceLookupExecutor;
 import com.netflix.discovery.EurekaClient;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -28,7 +29,8 @@ public class SecurityServiceConfiguration {
 
     @Bean
     public GatewayInstanceInitializer gatewayInstanceInitializer(
-        @Qualifier("eurekaClient") EurekaClient eurekaClient,
+        //@Qualifier("eurekaClient")
+        @Autowired EurekaClient eurekaClient,
         ApplicationEventPublisher applicationEventPublisher,
         GatewayClient gatewayClient) {
 

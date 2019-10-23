@@ -28,7 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
         "eureka.client.fetchRegistry=false",
-        "eureka.client.registerWithEureka=false"
+        "eureka.client.registerWithEureka=false",
+        "server.ssl.enabled=false"
     },
     classes = {DiscoveryServiceApplication.class}
 )
@@ -50,6 +51,7 @@ public class EurekaSecuredEndpointsTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
+            //SslContextFactory
     }
 
     @Test

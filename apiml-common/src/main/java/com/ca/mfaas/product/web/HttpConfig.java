@@ -11,15 +11,13 @@ package com.ca.mfaas.product.web;
 
 import com.ca.mfaas.security.HttpsConfig;
 import com.ca.mfaas.security.HttpsFactory;
-import com.ca.mfaas.security.SecurityUtils;
-import com.netflix.discovery.shared.transport.jersey.EurekaJerseyClient;
-import com.netflix.discovery.shared.transport.jersey.EurekaJerseyClientImpl.EurekaJerseyClientBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,6 +28,9 @@ import javax.net.ssl.SSLContext;
 @Slf4j
 @Configuration
 public class HttpConfig {
+
+    private static final Logger log = LoggerFactory.getLogger(HttpConfig.class);
+
     @Value("${server.ssl.protocol:TLSv1.2}")
     private String protocol;
 
@@ -69,36 +70,82 @@ public class HttpConfig {
     @Value("${eureka.client.serviceUrl.defaultZone}")
     private String eurekaServerUrl;
 
+    @Value("${server.ssl.enabled}")
+    private String serverSslEnabled;
+
     private CloseableHttpClient secureHttpClient;
     private SSLContext secureSslContext;
     private HostnameVerifier secureHostnameVerifier;
-    private EurekaJerseyClientBuilder eurekaJerseyClientBuilder;
+    //private EurekaJerseyClientBuilder eurekaJerseyClientBuilder;
 
-    @PostConstruct
-    public void init() {
-        try {
-            HttpsConfig httpsConfig = HttpsConfig.builder().protocol(protocol).keyAlias(keyAlias).keyStore(keyStore).keyPassword(keyPassword)
+
+    @ConditionalOnProperty(
+        prefix = "server.ssl",
+        name = "enabled",
+        havingValue = "true",
+        matchIfMissing = true)
+    private class SecureOne {
+
+        @PostConstruct
+        public void initHttps() {
+            try {
+                HttpsConfig httpsConfig = HttpsConfig.builder().protocol(protocol).keyAlias(keyAlias).keyStore(keyStore).keyPassword(keyPassword)
                     .keyStorePassword(keyStorePassword).keyStoreType(keyStoreType).trustStore(trustStore)
                     .trustStoreType(trustStoreType).trustStorePassword(trustStorePassword).trustStoreRequired(trustStoreRequired)
                     .verifySslCertificatesOfServices(verifySslCertificatesOfServices).build();
 
-            log.info("Using HTTPS configuration: {}", httpsConfig.toString());
+                log.info("Using HTTPS configuration: {}", httpsConfig.toString());
 
-            HttpsFactory factory = new HttpsFactory(httpsConfig);
-            secureHttpClient = factory.createSecureHttpClient();
-            secureSslContext = factory.createSslContext();
-            secureHostnameVerifier = factory.createHostnameVerifier();
-            eurekaJerseyClientBuilder = factory.createEurekaJerseyClientBuilder(eurekaServerUrl, serviceId);
+                HttpsFactory factory = new HttpsFactory(httpsConfig);
+                secureHttpClient = factory.createSecureHttpClient();
+                secureSslContext = factory.createSslContext();
+                secureHostnameVerifier = factory.createHostnameVerifier();
+                //eurekaJerseyClientBuilder = factory.createEurekaJerseyClientBuilder(eurekaServerUrl, serviceId);
 
-            factory.setSystemSslProperties();
-        }
-        catch (Exception e) {
-            log.error("Error in HTTPS configuration: {}", e.getMessage(), e);
-            System.exit(1); // NOSONAR
+                factory.setSystemSslProperties();
+            } catch (Exception e) {
+                log.error("Error in HTTPS configuration: {}", e.getMessage(), e);
+                System.exit(1); // NOSONAR
+            }
         }
     }
 
+    @ConditionalOnProperty(
+        prefix = "server.ssl",
+        name = "enabled",
+        havingValue = "false",
+        matchIfMissing = true)
+    private class UnsecureOne {
+
+        @PostConstruct
+        public void initHttp() {
+            try {
+                HttpsConfig httpsConfig = HttpsConfig.builder().protocol(protocol).keyAlias(keyAlias).keyStore(keyStore).keyPassword(keyPassword)
+                    .keyStorePassword(keyStorePassword).keyStoreType(keyStoreType).trustStore(trustStore)
+                    .trustStoreType(trustStoreType).trustStorePassword(trustStorePassword).trustStoreRequired(trustStoreRequired)
+                    .verifySslCertificatesOfServices(verifySslCertificatesOfServices).build();
+
+                log.info("Using HTTPS configuration: {}", httpsConfig.toString());
+
+                HttpsFactory factory = new HttpsFactory(httpsConfig);
+                //secureHttpClient = factory.createSecureHttpClient();
+                //secureSslContext = factory.createSslContext();
+                //secureHostnameVerifier = factory.createHostnameVerifier();
+                //eurekaJerseyClientBuilder = factory.createEurekaJerseyClientBuilder(eurekaServerUrl, serviceId);
+
+                factory.setSystemSslProperties();
+            } catch (Exception e) {
+                log.error("Error in HTTPS configuration: {}", e.getMessage(), e);
+                System.exit(1); // NOSONAR
+            }
+        }
+    }
+/*
     @Bean
+    @ConditionalOnProperty(
+        value = "server.ssl.enabled",
+        havingValue = "true",
+        matchIfMissing = true)
     public SslContextFactory jettySslContextFactory() {
         SslContextFactory sslContextFactory = new SslContextFactory(SecurityUtils.replaceFourSlashes(keyStore));
         sslContextFactory.setProtocol(protocol);
@@ -119,30 +166,40 @@ public class HttpConfig {
 
         return sslContextFactory;
     }
+*/
 
     @Bean
     public RestTemplate restTemplate() {
-        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(secureHttpClient);
-        return new RestTemplate(factory);
+        RestTemplate template = null;
+        if (secureHttpClient != null) {
+            HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(secureHttpClient);
+            template = new RestTemplate(factory);
+        } else {
+            template = new RestTemplate();
+        }
+
+        return template;
     }
 
-    @Bean
+    /*@Bean
     public CloseableHttpClient secureHttpClient() {
         return secureHttpClient;
-    }
+    }*/
 
-    @Bean
+    /*@Bean
     public SSLContext secureSslContext() {
         return secureSslContext;
-    }
+    }*/
 
-    @Bean
+    /*@Bean
     public HostnameVerifier secureHostnameVerifier() {
         return secureHostnameVerifier;
-    }
+    }*/
 
-    @Bean
-    public EurekaJerseyClient eurekaJerseyClient() {
-        return eurekaJerseyClientBuilder.build();
-    }
+    /*public static class MyPropertyCondition implements Condition {
+        @Override
+        public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+            return false;//... place your root detecting logic here ...
+        }
+    }*/
 }

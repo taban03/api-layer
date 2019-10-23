@@ -1,7 +1,7 @@
 credentials:
     # Mainframe credentials are required - see /integration-tests/README.md for instructions
-    user: user
-    password: user
+    user: zahpa01
+    password: pasrol12
 gatewayServiceConfiguration:
     scheme: https
     host: localhost

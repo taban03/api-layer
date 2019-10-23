@@ -31,6 +31,8 @@ spring:
         client:
             hostname: ${apiml.service.hostname}
             ipAddress: ${apiml.service.ipAddress}
+        discovery:
+            enabled: false
     mvc:
         throw-exception-if-no-handler-found: true
     output:
@@ -98,6 +100,7 @@ eureka:
                         title: Service Integration Enabler V2 Sample Application (Spring Boot 2.x) © #Copyright is for UTF8 encoding check
                         description: Sample API service showing how to integrate a Spring Boot v2.x application
     client:
+        enabled: false
         fetchRegistry: true
         registerWithEureka: true
         region: default

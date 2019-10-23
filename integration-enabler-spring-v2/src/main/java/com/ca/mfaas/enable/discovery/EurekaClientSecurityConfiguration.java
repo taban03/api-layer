@@ -15,12 +15,17 @@ import com.netflix.discovery.DiscoveryClient;
 import com.netflix.discovery.shared.transport.jersey.EurekaJerseyClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import javax.annotation.PostConstruct;
 
 @Configuration
 @Slf4j
+@ConditionalOnProperty(
+    value = "server.ssl.enabled",
+    havingValue = "true",
+    matchIfMissing = true)
 public class EurekaClientSecurityConfiguration {
     @Value("${server.ssl.protocol:TLSv1.2}")
     private String protocol;
@@ -58,25 +63,33 @@ public class EurekaClientSecurityConfiguration {
     @Value("${apiml.security.ssl.verifySslCertificatesOfServices:true}")
     private boolean verifySslCertificatesOfServices;
 
+    @Value("${server.ssl.enabled:true}")
+    private boolean serverSslEnabled;
+
     private EurekaJerseyClient eurekaJerseyClient;
 
     @PostConstruct
     public void init() {
-        HttpsConfig httpsConfig = HttpsConfig.builder().keyAlias(keyAlias).protocol(protocol).keyStore(keyStore).keyPassword(keyPassword)
+        //if (serverSslEnabled) {
+            HttpsConfig httpsConfig = HttpsConfig.builder().keyAlias(keyAlias).protocol(protocol).keyStore(keyStore).keyPassword(keyPassword)
                 .keyStorePassword(keyStorePassword).keyStoreType(keyStoreType).trustStore(trustStore)
                 .trustStoreType(trustStoreType).trustStorePassword(trustStorePassword)
                 .verifySslCertificatesOfServices(verifySslCertificatesOfServices).build();
 
-        log.info("Using HTTPS configuration: {}", httpsConfig.toString());
+            log.info("Using HTTPS configuration: {}", httpsConfig.toString());
 
-        HttpsFactory factory = new HttpsFactory(httpsConfig);
-        eurekaJerseyClient = factory.createEurekaJerseyClientBuilder(eurekaServerUrl, serviceId).build();
+            HttpsFactory factory = new HttpsFactory(httpsConfig);
+            eurekaJerseyClient = factory.createEurekaJerseyClientBuilder(eurekaServerUrl, serviceId).build();
+       // }
     }
 
     @Bean
     public DiscoveryClient.DiscoveryClientOptionalArgs discoveryClientOptionalArgs() {
-        DiscoveryClient.DiscoveryClientOptionalArgs args = new DiscoveryClient.DiscoveryClientOptionalArgs();
-        args.setEurekaJerseyClient(eurekaJerseyClient);
+        DiscoveryClient.DiscoveryClientOptionalArgs args = null;
+        if (eurekaJerseyClient != null) {
+            args = new DiscoveryClient.DiscoveryClientOptionalArgs();
+            args.setEurekaJerseyClient(eurekaJerseyClient);
+        }
         return args;
     }
 }

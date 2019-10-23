@@ -17,6 +17,7 @@ environment:
 
 eureka:
     client:
+        enabled: false
         initialInstanceInfoReplicationIntervalSeconds: 5
         registryFetchIntervalSeconds: 5
     instance:
@@ -25,10 +26,11 @@ eureka:
 
 server:
     ssl:
-        enabled: true
+        enabled: false
         keyAlias: localhost
         keyPassword: password
-        keyStore: keystore/localhost/localhost.keystore.p12
+        keyStore:
+        #keystore/localhost/localhost.keystore.p12
         keyStorePassword: password
         keyStoreType: PKCS12
 
