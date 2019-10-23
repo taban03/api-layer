@@ -87,3 +87,15 @@ dependencies {
         "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
 }
 
+tomcat {
+    httpProtocol = 'org.apache.coyote.http11.Http11Nio2Protocol'
+    ajpProtocol  = 'org.apache.coyote.ajp.AjpNio2Protocol'
+
+    httpPort = 10021
+    ajpPort = 8010
+    stopPort = 8082
+
+    contextPath = '/discoplug'
+}
+
+
