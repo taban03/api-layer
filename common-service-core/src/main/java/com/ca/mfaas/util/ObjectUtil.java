@@ -50,12 +50,7 @@ public class ObjectUtil {
 
 
     public Map<String, String> getThreadContextMap(ThreadLocal<Map<String, String>> threadConfigurationContext) {
-        Map<String, String>  aMap = threadConfigurationContext.get();
-        if (aMap == null) {
-            aMap = new HashMap<>();
-            threadConfigurationContext.set(aMap);
-        }
-        return aMap;
+        return threadConfigurationContext.get();
     }
 
 
@@ -109,7 +104,12 @@ public class ObjectUtil {
      *  the thread instances belong to a thread pool.
      *  We need then to clean the threadConfigurationContext before loading new configuration parameters from servlet context.
      */
-    public static void initializeContextMap(ThreadLocal threadConfigurationContext) {
+    public static Map initializeContextMap(ThreadLocal threadConfigurationContext) {
         threadConfigurationContext.remove();
+
+        Map aMap = new HashMap<>();
+        threadConfigurationContext.set(aMap);
+
+        return aMap;
     }
 }

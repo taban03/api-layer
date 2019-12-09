@@ -93,7 +93,7 @@ public class ApiMediationServiceConfigReader {
     /**
      * Instance member of ThreadLocal holding a Map<String, String> of configuration properties.
      */
-    private ThreadLocal<Map<String, String>> threadConfigurationContext = ThreadLocal.withInitial(HashMap::new);
+    private ThreadLocal<Map<String, String>> threadConfigurationContext = new ThreadLocal(); //.withInitial(HashMap::new);
 
 
     /**
@@ -254,8 +254,11 @@ public class ApiMediationServiceConfigReader {
      * @param servletContext
      */
     public Map<String, String> setApiMlServiceContext(ServletContext servletContext) {
-        Map<String, String> threadContextMap = ObjectUtil.getThreadContextMap(threadConfigurationContext);
-
+        //
+        Map<String, String> threadContextMap = threadConfigurationContext.get();
+        if (threadContextMap == null) {
+            threadContextMap = ObjectUtil.initializeContextMap(threadConfigurationContext);
+        }
         Enumeration<String> paramNames = servletContext.getInitParameterNames();
         while (paramNames.hasMoreElements()) {
             String param = paramNames.nextElement();
@@ -329,7 +332,7 @@ public class ApiMediationServiceConfigReader {
          */
         setApiMlServiceContext(context);
 
-        Map<String, String> threadContextMap = ObjectUtil.getThreadContextMap(threadConfigurationContext);
+        Map<String, String> threadContextMap = threadConfigurationContext.get();
 
         /*
          *  Get default configuration file name from ServletContext init parameter.
@@ -362,7 +365,8 @@ public class ApiMediationServiceConfigReader {
      */
     private Map<String, String> setApiMlSystemProperties() {
 
-        Map<String, String> threadContextMap = ObjectUtil.getThreadContextMap(threadConfigurationContext);
+        ObjectUtil.initializeContextMap(threadConfigurationContext);
+        Map<String, String> threadContextMap = threadConfigurationContext.get();
 
         Enumeration<?> propertyNames = System.getProperties().propertyNames();
         while (propertyNames.hasMoreElements()) {

@@ -45,11 +45,12 @@ public class ObjectUtilTest {
 
     @Test
     public void testSetApiMlContextMap_Ok() {
-        Map map = ObjectUtil.getThreadContextMap(threadContext);
+        ObjectUtil.initializeContextMap(threadContext);
+        Map map = threadContext.get();
         assertNotNull(map);
 
         map.put("test.property", "test.value");
-        map = ObjectUtil.getThreadContextMap(threadContext);
+        map = threadContext.get();
         assertEquals("test.value", map.get("test.property"));
     }
 
@@ -203,20 +204,21 @@ public class ObjectUtilTest {
     @Test
     public void testInitializeContextMap() {
         ThreadLocal<Map<String, String>> threadConfigurationContext = new ThreadLocal();
-        Map map = ObjectUtil.getThreadContextMap(threadConfigurationContext);
+        ObjectUtil.initializeContextMap(threadConfigurationContext);
+        Map map = threadConfigurationContext.get();
         assertNotNull(map);
         assertEquals(0, map.size());
 
         map.put("ZOWE", "APIML");
 
-        map = ObjectUtil.getThreadContextMap(threadConfigurationContext);
+        map = threadConfigurationContext.get();
         assertNotNull(map);
         assertEquals(1, map.size());
         assertEquals("APIML", map.get("ZOWE"));
 
         ObjectUtil.initializeContextMap(threadConfigurationContext);
 
-        Map newMap = ObjectUtil.getThreadContextMap(threadConfigurationContext);
+        Map newMap = threadConfigurationContext.get();
         assertNotNull(newMap);
         assertEquals(0, newMap.size());
         assertNotSame(map, newMap);
