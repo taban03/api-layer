@@ -40,7 +40,7 @@ public class GatewayHealthIndicatorTest {
     public void testStatusIsUpWhenCatalogAndDiscoveryAreAvailable() {
         DiscoveryClient discoveryClient = mock(DiscoveryClient.class);
         when(discoveryClient.getInstances(CoreService.API_CATALOG.getServiceId())).thenReturn(
-            Collections.singletonList(new DefaultServiceInstance(CoreService.API_CATALOG.getServiceId(), "host", 10014, true)));
+            Collections.singletonList(new DefaultServiceInstance(CoreService.API_CATALOG.getServiceId(), "host", 10012, true)));
         when(discoveryClient.getInstances(CoreService.DISCOVERY.getServiceId())).thenReturn(
             Collections.singletonList(new DefaultServiceInstance(CoreService.DISCOVERY.getServiceId(), "host", 10011, true)));
         when(discoveryClient.getInstances(ZOSMF)).thenReturn(
@@ -56,7 +56,7 @@ public class GatewayHealthIndicatorTest {
     public void testStatusIsDownWhenDiscoveryIsNotAvailable() {
         DiscoveryClient discoveryClient = mock(DiscoveryClient.class);
         when(discoveryClient.getInstances(CoreService.API_CATALOG.getServiceId())).thenReturn(
-            Collections.singletonList(new DefaultServiceInstance(CoreService.API_CATALOG.getServiceId(), "host", 10014, true)));
+            Collections.singletonList(new DefaultServiceInstance(CoreService.API_CATALOG.getServiceId(), "host", 10012, true)));
         when(discoveryClient.getInstances(CoreService.DISCOVERY.getServiceId())).thenReturn(Collections.emptyList());
         when(discoveryClient.getInstances(ZOSMF)).thenReturn(Collections.emptyList());
 

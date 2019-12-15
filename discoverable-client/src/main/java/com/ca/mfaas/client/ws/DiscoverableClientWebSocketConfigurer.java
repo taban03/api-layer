@@ -9,18 +9,21 @@
  */
 package com.ca.mfaas.client.ws;
 
+import com.ca.apiml.enable.register.RegisterToApiLayer;
+import com.ca.mfaas.message.core.MessageService;
 import com.ca.mfaas.message.core.MessageType;
 import com.ca.mfaas.message.log.ApimlLogger;
-import com.ca.mfaas.product.logging.annotations.InjectApimlLogger;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 @Component
 public class DiscoverableClientWebSocketConfigurer implements WebSocketConfigurer {
+    private final ApimlLogger logger;
 
-    @InjectApimlLogger
-    private final ApimlLogger logger = ApimlLogger.empty();
+    public DiscoverableClientWebSocketConfigurer(MessageService messageService) {
+        this.logger = ApimlLogger.of(RegisterToApiLayer.class, messageService);
+    }
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {

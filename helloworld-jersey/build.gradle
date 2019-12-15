@@ -18,21 +18,24 @@ repositories {
 dependencies {
     compile(project(':integration-enabler-java'))
 
- //   compile 'io.swagger:swagger-jersey2-jaxrs:1.5.21'
-    compile 'io.swagger.core.v3:swagger-jaxrs2:2.0.0'
-    compile libraries.jackson_dataformat_yaml
+    implementation 'io.swagger.core.v3:swagger-jaxrs2:2.0.0'
+    implementation libraries.jackson_dataformat_yaml
     compileOnly libraries.lombok
-    compile libraries.logback_classic
-    compile libraries.jersey_server
-    compile libraries.jersey_hk2
-    compile libraries.jersey_container_servlet_core
-    compile libraries.jersey_media_json_jackson
+    implementation libraries.logback_classic
+    implementation libraries.jersey_server
+    implementation libraries.jersey_hk2
+    implementation libraries.jersey_container_servlet_core
+    implementation libraries.jersey_media_json_jackson
+
+    providedCompile libraries.javax_servlet_api
 
     testCompile libraries.junit
     testCompile libraries.jersey_test_provider_jdk_http
     testCompile libraries.spring4Test
     testCompile libraries.mockito_core
     testCompile libraries.json_path
+    testImplementation libraries.eureka_client
+
 
     def tomcatVersion = '8.0.53'
     tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",

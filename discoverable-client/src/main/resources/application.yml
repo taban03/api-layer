@@ -11,35 +11,10 @@ logging:
         com.netflix.discovery.DiscoveryClient: OFF
         org.springframework.boot.web.embedded.tomcat.TomcatWebServer: INFO
 
-apiml:
-    security:
-        ssl:
-            ciphers: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384
-    # The `apiml` node contains API Mediation Layer specific configuration
-    service:
-        # The `apiml.service` node contains information required by any APIML service
-        id: discoverableclient  # Service ID of this service
-        hostname: localhost  # Hostname that is advertised in Eureka. Default is valid only for localhost
-        port: 10012  # Default port name for discoverable-clinet service
-        ipAddress: 127.0.0.1  # IP address that is advertised in Eureka. Default is valid only for localhost
-        preferIpAddress: false        
-
-spring:
-    application:
-        name: ${apiml.service.id}
-    cloud:
-        client:
-            hostname: ${apiml.service.hostname}
-            ipAddress: ${apiml.service.ipAddress}
-    mvc:
-        throw-exception-if-no-handler-found: true
-    output:
-        ansi:
-            enabled: detect
+logbackServiceName: ZWEADC1
 
 server:
-    address: ${apiml.service.ipAddress}
-    port: ${apiml.service.port}
+    port: 10013
     servlet:
         contextPath: /discoverableclient
     ssl:
@@ -50,63 +25,13 @@ server:
         keyStoreType: PKCS12
         trustStoreType: PKCS12
 
-eureka:
-    instance:
-        hostname: ${apiml.service.hostname}
-        ipAddress: ${apiml.service.ipAddress}
-        port: ${server.port}
-        securePort: ${server.port}
-        nonSecurePortEnabled: false
-        securePortEnabled: true
-        preferIpAddress: ${apiml.service.preferIpAddress}
-        homePageUrl: https://${apiml.service.hostname}:${apiml.service.port}${server.servlet.contextPath}
-        statusPageUrl: https://${apiml.service.hostname}:${apiml.service.port}${server.servlet.contextPath}/application/info
-        healthCheckUrl: https://${apiml.service.hostname}:${apiml.service.port}${server.servlet.contextPath}/application/health
-        metadata-map:
-            routed-services:
-                ui_v1:
-                    gateway-url: "ui/v1"
-                    service-url: ${server.servlet.contextPath}
-                api_v1:
-                    gateway-url: "api/v1"
-                    service-url: ${server.servlet.contextPath}/api/v1
-                ws_v1:
-                    gateway-url: "ws/v1"
-                    service-url: ${server.servlet.contextPath}/ws
-            apiml:
-                apiInfo:
-                    - apiId: org.zowe.discoverableclient
-                      gatewayUrl: api/v1
-                      swaggerUrl: https://${apiml.service.hostname}:${server.port}${server.servlet.contextPath}/api-doc
-                      documentationUrl: https://www.zowe.org
-            mfaas:
-                api-info:
-                    apiVersionProperties:
-                        v1:
-                            title: Service Integration Enabler V2 Sample Application API © #Copyright is for UTF8 encoding check
-                            description: API of sample API service showing how to integrate a Spring Boot v2.x application
-                            version: 1.0.0
-                            basePackage: com.ca.mfaas.client.api
-                discovery:
-                    catalogUiTile:
-                        id: cademoapps
-                        title: Sample API Mediation Layer Applications
-                        description: Applications which demonstrate how to make a service integrated to the API Mediation Layer ecosystem
-                        version: 1.0.1
-                    enableApiDoc: true
-                    service:
-                        title: Service Integration Enabler V2 Sample Application (Spring Boot 2.x) © #Copyright is for UTF8 encoding check
-                        description: Sample API service showing how to integrate a Spring Boot v2.x application
-    client:
-        fetchRegistry: true
-        registerWithEureka: true
-        region: default
-        serviceUrl:
-            defaultZone: ${apiml.service.discoveryServiceUrls}
-        healthcheck:
-            enabled: true
+spring:
+    mvc:
+        throw-exception-if-no-handler-found: true
+    output:
+        ansi:
+            enabled: detect
 
-##############################################################################################
 management:
     endpoints:
         web:
@@ -116,6 +41,42 @@ management:
     health:
         defaults:
             enabled: false
+
+# The `apiml` node contains API Mediation Layer specific configuration
+apiml:
+    enabled: false
+    service:
+        # Following values are default values that can be changed by user:
+        serviceId: discoverableclient
+        title: Service Spring Integration Enabler sample application API©     #Copyright is for UTF8 encoding check
+        description:  Sample API services to demonstrate Spring Integration Enabler
+        catalogUiTile:
+            id: cademoapps
+            title: Sample API Mediation Layer Applications
+            description: Applications which demonstrate how to make a service integrated to the API Mediation Layer ecosystem
+            version: 1.0.0
+        # Following values are provided by the developer:
+        scheme: https
+        baseUrl: ${apiml.service.scheme}://${apiml.service.hostname}:${server.port}
+        homePageRelativeUrl: ${server.servlet.contextPath}
+        statusPageRelativeUrl: actuator/info
+        healthCheckRelativeUrl: actuator/health
+        routes:
+            -   gatewayUrl: ui/v1
+                serviceUrl: ${server.servlet.contextPath}
+            -   gatewayUrl: api/v1
+                serviceUrl: ${server.servlet.contextPath}/api/v1
+            -   gatewayUrl: ws/v1
+                serviceUrl: ${server.servlet.contextPath}/ws
+        apiInfo:
+            -   apiId: org.zowe.discoverableclient
+                gatewayUrl: api/v1
+                version: 1.0.0
+                swaggerUrl: https://${apiml.service.hostname}:${server.port}${server.servlet.contextPath}/v2/api-docs
+                documentationUrl: https://www.zowe.org
+    security:
+        ssl:
+            ciphers: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384
 
 ---
 spring:
@@ -142,4 +103,28 @@ logging:
         org.apache.catalina: INFO
         com.netflix: INFO
 
-logbackServiceName: ZWEADC1
+
+---
+spring:
+    profiles: diag
+
+management:
+    endpoints:
+        web:
+            base-path: /application
+            exposure:
+                include: "*"
+
+---
+spring:
+    profiles: dev
+    profiles.include:
+        diag
+
+logging:
+    level:
+        ROOT: INFO
+        com.ca.mfaas: DEBUG
+        org.springframework: INFO
+        org.apache.catalina: INFO
+        com.netflix: INFO

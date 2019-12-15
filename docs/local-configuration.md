@@ -234,8 +234,8 @@ If your editor of choice happens to be Idea and you wnat to use its 'Run Dashboa
 |:----------------------:|:-----:|
 |        Gateway         | 10010 |
 |   Discovery Service    | 10011 |
-|  Discoverable client   | 10012 |
-|      API Catalog       | 10014 |
+|      API Catalog       | 10012 |
+|  Discoverable client   | 10013 |
 |   Helloword (Jersey)   | 10016 |
 | Helloworld (ExpressJs) | 10020 |
 |   Helloworld (Spring)  | 10021 |

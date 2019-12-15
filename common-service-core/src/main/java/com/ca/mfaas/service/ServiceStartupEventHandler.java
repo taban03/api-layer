@@ -7,7 +7,7 @@
  *
  * Copyright Contributors to the Zowe Project.
  */
-package com.ca.mfaas.product.service;
+package com.ca.mfaas.service;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -25,14 +25,14 @@ public class ServiceStartupEventHandler {
     @SuppressWarnings("squid:S1172")
     public void onServiceStartup(String serviceName, int delayFactor) {
         long uptime = ManagementFactory.getRuntimeMXBean().getUptime();
-        apimlLog.log("apiml.common.serviceStarted",serviceName, uptime / 1000.0);
+        apimlLog.log("apiml.common.serviceStarted", serviceName, uptime / 1000.0);
 
         new java.util.Timer().schedule(new java.util.TimerTask() {
             @Override
             public void run() {
                 LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-                String[] names = new String[] { "com.netflix.discovery.DiscoveryClient",
-                        "com.netflix.discovery.shared.transport.decorator.RedirectingEurekaHttpClient" };
+                String[] names = new String[]{"com.netflix.discovery.DiscoveryClient",
+                    "com.netflix.discovery.shared.transport.decorator.RedirectingEurekaHttpClient"};
                 for (String name : names) {
                     Logger logger = loggerContext.getLogger(name);
                     logger.setLevel(Level.ERROR);

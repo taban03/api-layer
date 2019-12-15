@@ -4,7 +4,7 @@ apiml:
     service:
         hostname: localhost
         ipAddress: 127.0.0.1
-        port: 10012
+        port: 10013
         discoveryServiceUrls: https://localhost2:10021/eureka/,https://localhost3:10031/eureka/
 
 spring:

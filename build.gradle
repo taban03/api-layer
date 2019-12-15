@@ -83,6 +83,7 @@ subprojects {
         maxParallelForks = Runtime.runtime.availableProcessors()
     }
 
+    task allDeps(type: DependencyReportTask) {}
 }
 
 configurations {

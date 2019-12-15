@@ -7,6 +7,7 @@ ext {
     slf4jVersion = '1.7.25'
     jsonVersion = '20180813'
     jsonPathVersion = '2.4.0'
+    springFoxVersion = '2.9.2'
     httpClientVersion = '4.5.3'
     guavaVersion = '23.2-jre'
     mockSpringRestVersion = '1.0.2'
@@ -18,7 +19,7 @@ ext {
     restAssuredVersion = '3.0.7'
     commonsValidatorVersion = "1.6"
     powerMockVersion = "1.7.3"
-    jacksonCoreVersion = "2.9.6"
+    jacksonCoreVersion = "2.9.7"
     javaxValidationApiVersion = "2.0.1.Final"
     esmClientVersion = '2.0.0-SNAPSHOT'
     gsonVersion = '2.8.2'
@@ -28,7 +29,7 @@ ext {
     commonsLang3Version = '3.7'
     gradleGitPropertiesVersion = '1.5.1'
     jettyWebSocketClientVersion = '9.4.11.v20180605'
-    eurekaClientVersion = '1.8.6'
+    eurekaClientVersion = '1.9.3'
     junitVersion = '4.12'
     logbackVersion = '1.2.3'
     spring4Version = '4.3.7.RELEASE'
@@ -45,14 +46,19 @@ ext {
     swaggerCoreVersion = "1.5.21"
     swagger3CoreVersion = "2.0.0"
     swaggerJerseyJaxrsVersion = '1.5.10'
-    jacksonDataformatYamlVersion = '2.9.7'
     jerseyVersion = '2.26'
+    bootstrapVersion = '4.3.1'
+    jqueryVersion = '3.4.1'
+    findBugs = '3.0.2'
 
     libraries = [
         lombok                             : "org.projectlombok:lombok:${lombokVersion}",
+
         slf4j_simple                       : "org.slf4j:slf4j-simple:${slf4jVersion}",
         slf4j_api                          : "org.slf4j:slf4j-api:${slf4jVersion}",
+
         spring_boot_gradle_plugin          : "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}",
+        spring_boot_starter                : "org.springframework.boot:spring-boot-starter:${springBootVersion}",
         spring_boot_starter_actuator       : "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}",
         spring_boot_starter_security       : "org.springframework.boot:spring-boot-starter-security:${springBootVersion}",
         spring_boot_starter_web            : "org.springframework.boot:spring-boot-starter-web:${springBootVersion}",
@@ -125,12 +131,15 @@ ext {
         snakeyaml                          : "org.yaml:snakeyaml:${snakeyamlVersion}",
         json_unit                          : "net.javacrumbs.json-unit:json-unit:${jsonUnitVersion}",
         json_unit_fluent                   : "net.javacrumbs.json-unit:json-unit-fluent:${jsonUnitVersion}",
-        jackson_dataformat_yaml            : "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonDataformatYamlVersion}",
+        jackson_dataformat_yaml            : "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonCoreVersion}",
         jersey_server                      : "org.glassfish.jersey.core:jersey-server:${jerseyVersion}",
         jersey_hk2                         : "org.glassfish.jersey.inject:jersey-hk2:${jerseyVersion}",
         jersey_container_servlet_core      : "org.glassfish.jersey.containers:jersey-container-servlet-core:${jerseyVersion}",
         jersey_media_json_jackson          : "org.glassfish.jersey.media:jersey-media-json-jackson:${jerseyVersion}",
-        jersey_test_provider_jdk_http      : "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-jdk-http:${jerseyVersion}"
+        jersey_test_provider_jdk_http      : "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-jdk-http:${jerseyVersion}",
+        find_bugs                          : "com.google.code.findbugs:jsr305:${findBugs}",
 
+        bootstrap                          : "org.webjars:bootstrap:${bootstrapVersion}",
+        jquery                             : "org.webjars:jquery:${jqueryVersion}"
     ]
 }

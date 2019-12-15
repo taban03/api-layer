@@ -1,0 +1,9 @@
+dependencies {
+    implementation(project(':integration-enabler-java'))
+    implementation libraries.lombok
+
+    implementation libraries.spring_boot_starter
+
+    annotationProcessor libraries.spring_boot_configuration_processor
+    annotationProcessor libraries.lombok
+}

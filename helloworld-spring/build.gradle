@@ -32,6 +32,7 @@ dependencies {
     testCompile libraries.mockito_core
     testCompile libraries.spring4Test
     testCompile libraries.json_path
+    testImplementation libraries.eureka_client
 
     def tomcatVersion = '8.5.16'
     tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",

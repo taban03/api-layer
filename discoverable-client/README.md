@@ -13,7 +13,7 @@ You can see this application registered to the Catalog under the tile "Sample AP
 This service includes a simple greeting as well as a basic petstore for PUT, DELETE or POST requests. 
 
 To access the service directly from your browser go to 
-[https://localhost:10012/discoverableclient/](https://localhost:10012/discoverableclient/),
+[https://localhost:10013/discoverableclient/](https://localhost:10013/discoverableclient/),
 and via gateway to [https://localhost:10010/ui/v1/discoverableclient/](https://localhost:10010/ui/v1/discoverableclient/).
 
 

@@ -1,25 +1,14 @@
 dependencies {
-    compile(libraries.eureka_client)
-    compile(libraries.http_client)
-    compile(libraries.http_core)
-    compile(libraries.jackson_annotations)
-    compile(libraries.jackson_databind)
-    compile(libraries.slf4j_api)
-    compile(libraries.snakeyaml)
+    implementation libraries.eureka_client
+    implementation libraries.http_core
+    implementation libraries.snakeyaml
+    implementation libraries.logback_classic
 
-    compileOnly(libraries.javax_servlet_api)
-    compileOnly(libraries.lombok)
+    compileOnly libraries.lombok
 
-    testCompile(libraries.jackson_core)
-    testCompile(libraries.jackson_databind)
-    testCompile(libraries.javax_servlet_api)
-    testCompile(libraries.json_unit_fluent)
-    testCompile(libraries.json_unit)
-    testCompile(libraries.junit)
-    testCompile(libraries.hamcrest)
-    testCompile(libraries.logback_classic)
-    testCompile(libraries.tomcat_embed_core)
-    testCompile(libraries.mockito_core)
+    testImplementation libraries.junit
+    testImplementation libraries.hamcrest
+    testImplementation libraries.tomcat_embed_core
 
-    testCompileOnly(libraries.lombok)
+    testCompileOnly libraries.lombok
 }

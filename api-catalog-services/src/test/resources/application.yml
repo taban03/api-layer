@@ -41,7 +41,7 @@ mfaas:
         description: Display services which are discoverable in the Zowe ecosystem and have API documentation
         version:  1.0.0
     server:
-        port: ${environment.port:10014}
+        port: ${environment.port:10012}
         contextPath: /apicatalog
         scheme: http
     security:
