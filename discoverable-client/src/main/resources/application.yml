@@ -44,13 +44,15 @@ management:
 
 # The `apiml` node contains API Mediation Layer specific configuration
 apiml:
-    enabled: false
+    enabled: true
     service:
         # Following values are default values that can be changed by user:
-        serviceId: discoverableclient
-        title: Service Spring Integration Enabler sample application API©     #Copyright is for UTF8 encoding check
+        serviceId: discoverableclient2
+        title: Service Spring Integration Enabler sample application API #©     #Copyright is for UTF8 encoding check
         description:  Sample API services to demonstrate Spring Integration Enabler
-        catalogUiTile:
+        serviceIpAddress: 127.0.0.2
+        catalog:
+          tile:
             id: cademoapps
             title: Sample API Mediation Layer Applications
             description: Applications which demonstrate how to make a service integrated to the API Mediation Layer ecosystem

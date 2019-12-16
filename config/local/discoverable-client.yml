@@ -7,7 +7,7 @@ spring:
 
 server:
     address: 0.0.0.0
-    port: 10013
+    port: 10043
     ssl:
         keyAlias: localhost
         keyPassword: password
