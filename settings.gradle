@@ -18,4 +18,6 @@ include 'api-catalog-services'
 include 'api-catalog-ui'
 include 'security-service-client-spring'
 include 'integration-enabler-spring'
+include 'onboarding-enabler-spring-v1'
+include 'onboarding-enabler-spring-v2'
 

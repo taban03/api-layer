@@ -9,7 +9,7 @@
  */
 package com.ca.mfaas.gateway;
 
-import com.ca.mfaas.enable.EnableApiDiscovery;
+import com.ca.apiml.enable.EnableApiDiscovery;
 import com.ca.mfaas.gateway.ribbon.GatewayRibbonConfig;
 import com.ca.mfaas.product.monitoring.LatencyUtilsConfigInitializer;
 import com.ca.mfaas.service.ServiceStartupEventHandler;
@@ -36,7 +36,7 @@ import javax.annotation.Nonnull;
     value = {
         "com.ca.mfaas.gateway",
         "com.ca.mfaas.product",
-        "com.ca.mfaas.enable",
+        "com.ca.apiml.enable",
         "com.ca.apiml.security.common"},
     excludeFilters = {
         @ComponentScan.Filter(type = FilterType.REGEX, pattern = ".*RibbonConfig")})

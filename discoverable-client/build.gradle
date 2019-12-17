@@ -32,7 +32,7 @@ gitProperties {
 
 dependencies {
     implementation(project(':common-service-core'))
-    implementation(project(':integration-enabler-spring'))
+    implementation(project(':onboarding-enabler-spring-v2'))
 
     implementation libraries.gson
     implementation libraries.spring_boot_starter_actuator

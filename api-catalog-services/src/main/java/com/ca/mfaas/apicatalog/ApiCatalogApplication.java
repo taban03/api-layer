@@ -9,7 +9,7 @@
  */
 package com.ca.mfaas.apicatalog;
 
-import com.ca.mfaas.enable.EnableApiDiscovery;
+import com.ca.apiml.enable.EnableApiDiscovery;
 import com.ca.mfaas.product.logging.annotations.EnableApimlLogger;
 import com.ca.mfaas.product.monitoring.LatencyUtilsConfigInitializer;
 import com.ca.mfaas.product.version.BuildInfo;
@@ -28,7 +28,7 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 @EnableWebFlux
 @EnableApiDiscovery
 @ComponentScan({
-    "com.ca.mfaas.enable",
+    "com.ca.apiml.enable",
     "com.ca.mfaas.apicatalog",
     "com.ca.mfaas.product.security",
     "com.ca.mfaas.product.web",

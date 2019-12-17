@@ -13,13 +13,11 @@ import com.ca.mfaas.message.core.MessageService;
 import com.ca.mfaas.message.yaml.YamlMessageServiceInstance;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Primary;
 
 @ComponentScan(value = {"com.ca.apiml.enable"})
 public class EnableApiDiscoveryConfig {
 
    @Bean
-    @Primary
     public MessageService messageServiceDiscovery() {
         MessageService messageService = YamlMessageServiceInstance.getInstance();
         messageService.loadMessages("/integration-enabler-spring-messages.yml");
