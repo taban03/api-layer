@@ -1,8 +1,8 @@
 dependencies {
-    implementation libraries.eureka_client
-    implementation libraries.http_core
-    implementation libraries.snakeyaml
-    implementation libraries.logback_classic
+    compile libraries.eureka_client
+    compile libraries.http_core
+    compile libraries.snakeyaml
+    compile libraries.logback_classic
 
     compileOnly libraries.lombok
 

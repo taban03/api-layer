@@ -10,11 +10,11 @@
 package com.ca.mfaas.apicatalog.health;
 
 import com.ca.mfaas.product.constants.CoreService;
+import com.netflix.discovery.EurekaClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,13 +24,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ApiCatalogHealthIndicator extends AbstractHealthIndicator {
 
-    private final DiscoveryClient discoveryClient;
+    private final EurekaClient discoveryClient;
 
     @Override
     protected void doHealthCheck(Health.Builder builder) {
         String gatewayServiceId = CoreService.GATEWAY.getServiceId();
 
-        boolean gatewayUp = !this.discoveryClient.getInstances(gatewayServiceId).isEmpty();
+        boolean gatewayUp = !this.discoveryClient.getInstancesById(gatewayServiceId).isEmpty();
         Status healthStatus = gatewayUp ? Status.UP : Status.DOWN;
 
         builder

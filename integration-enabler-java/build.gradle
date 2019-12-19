@@ -4,8 +4,9 @@ dependencies {
     implementation libraries.jackson_annotations
     implementation libraries.jackson_dataformat_yaml
     implementation libraries.jackson_databind
-    implementation libraries.eureka_client
     implementation libraries.lombok
+
+    //api libraries.eureka_client
 
     compileOnly libraries.javax_servlet_api
 

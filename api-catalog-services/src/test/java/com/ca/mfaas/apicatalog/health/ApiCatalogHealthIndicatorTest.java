@@ -10,11 +10,11 @@
 package com.ca.mfaas.apicatalog.health;
 
 import com.ca.mfaas.product.constants.CoreService;
+import com.netflix.appinfo.InstanceInfo;
+import com.netflix.discovery.DiscoveryClient;
 import org.junit.Test;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
-import org.springframework.cloud.client.DefaultServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 import java.util.Collections;
 
@@ -30,9 +30,15 @@ public class ApiCatalogHealthIndicatorTest {
 
     @Test
     public void testStatusIsUpWhenGatewayIsAvailable() {
-        when(discoveryClient.getInstances(CoreService.GATEWAY.getServiceId())).thenReturn(
+        when(discoveryClient.getInstancesById(CoreService.GATEWAY.getServiceId())).thenReturn(
             Collections.singletonList(
-                new DefaultServiceInstance(CoreService.GATEWAY.getServiceId(), "host", 10010, true)));
+                InstanceInfo.Builder.newBuilder()
+                    .setInstanceId(CoreService.GATEWAY.getServiceId())
+                    .setAppName(CoreService.GATEWAY.getServiceId())
+                    .setStatus(InstanceInfo.InstanceStatus.UP)
+                    .setPort(10010)
+                    .build()
+            ));
 
         apiCatalogHealthIndicator.doHealthCheck(builder);
 
@@ -41,7 +47,9 @@ public class ApiCatalogHealthIndicatorTest {
 
     @Test
     public void testStatusIsDownWhenGatewayIsNotAvailable() {
-        when(discoveryClient.getInstances(CoreService.GATEWAY.getServiceId())).thenReturn(Collections.emptyList());
+        when(discoveryClient.getInstancesById(CoreService.GATEWAY.getServiceId())).thenReturn(
+                Collections.emptyList()
+        );
 
         apiCatalogHealthIndicator.doHealthCheck(builder);
 

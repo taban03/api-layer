@@ -17,7 +17,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
 import javax.annotation.Nonnull;
@@ -26,8 +25,6 @@ import javax.annotation.Nonnull;
 @EnableApiDiscovery
 @EnableConfigurationProperties
 @EnableWebSocket
-@ComponentScan(value = {
-    "com.ca.mfaas.client"})
 public class DiscoverableClientSampleApplication implements ApplicationListener<ApplicationReadyEvent> {
 
     public static void main(String[] args) {
