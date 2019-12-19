@@ -32,15 +32,12 @@ gitProperties {
 }
 
 dependencies {
-    //compile(project(':common-service-core'))
     compile(project(':onboarding-enabler-spring-v2'))
 
     implementation(project(':apiml-security-common'))
 
     implementation libraries.ribbon_eureka
-    //implementation libraries.spring_cloud_starter_eureka
-    implementation libraries.spring_cloud_starter_zuul
-    implementation libraries.spring_cloud_starter_ribbon
+    //implementation libraries.spring_cloud_starter_zuul
 
     implementation libraries.spring_boot_starter_actuator
     implementation libraries.spring_boot_starter_web
