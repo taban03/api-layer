@@ -17,7 +17,6 @@ import com.ca.mfaas.product.version.BuildInfo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.HystrixAutoConfiguration;
 import org.springframework.cloud.netflix.ribbon.RibbonClients;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
@@ -26,8 +25,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
-
-import javax.annotation.Nonnull;
 
 @EnableZuulProxy
 @EnableWebSecurity
@@ -41,7 +38,6 @@ import javax.annotation.Nonnull;
     excludeFilters = {
         @ComponentScan.Filter(type = FilterType.REGEX, pattern = ".*RibbonConfig")})
 @RibbonClients(defaultConfiguration = GatewayRibbonConfig.class)
-@EnableEurekaClient
 @EnableWebSocket
 @EnableApiDiscovery
 public class GatewayApplication implements ApplicationListener<ApplicationReadyEvent> {
@@ -54,7 +50,7 @@ public class GatewayApplication implements ApplicationListener<ApplicationReadyE
     }
 
     @Override
-    public void onApplicationEvent(@Nonnull final ApplicationReadyEvent event) {
+    public void onApplicationEvent(final ApplicationReadyEvent event) {
         new ServiceStartupEventHandler().onServiceStartup("Gateway Service",
             ServiceStartupEventHandler.DEFAULT_DELAY_FACTOR);
     }

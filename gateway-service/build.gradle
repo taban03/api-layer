@@ -32,27 +32,28 @@ gitProperties {
 }
 
 dependencies {
-    compile(project(':common-service-core'))
+    //compile(project(':common-service-core'))
     compile(project(':onboarding-enabler-spring-v2'))
 
-    implement(project(':apiml-security-common'))
+    implementation(project(':apiml-security-common'))
 
-    //compile libraries.spring_cloud_starter_eureka
-    compile libraries.spring_cloud_starter_zuul
-    compile libraries.spring_cloud_starter_ribbon
+    implementation libraries.ribbon_eureka
+    //implementation libraries.spring_cloud_starter_eureka
+    implementation libraries.spring_cloud_starter_zuul
+    implementation libraries.spring_cloud_starter_ribbon
 
-    compile libraries.spring_boot_starter_actuator
-    compile libraries.spring_boot_starter_web
-    compile libraries.spring_boot_starter_websocket
-    compile libraries.spring_boot_starter_thymeleaf
+    implementation libraries.spring_boot_starter_actuator
+    implementation libraries.spring_boot_starter_web
+    implementation libraries.spring_boot_starter_websocket
+    implementation libraries.spring_boot_starter_thymeleaf
 
-    compile libraries.spring_security_web
-    compile libraries.spring_security_config
+    implementation libraries.spring_security_web
+    implementation libraries.spring_security_config
 
-    compile libraries.tomcat_coyote
-    compile libraries.tomcat_embed_core
-    compile libraries.jetty_websocket_client
-    compile libraries.jjwt
+    implementation libraries.tomcat_coyote
+    implementation libraries.tomcat_embed_core
+    implementation libraries.jetty_websocket_client
+    implementation libraries.jjwt
 
     compileOnly libraries.lombok
 
