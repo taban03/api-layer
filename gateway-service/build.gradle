@@ -33,21 +33,24 @@ gitProperties {
 
 dependencies {
     compile(project(':common-service-core'))
-    compile(project(':apiml-security-common'))
-    compile(project(':integration-enabler-spring'))
     compile(project(':onboarding-enabler-spring-v2'))
 
+    implement(project(':apiml-security-common'))
+
+    //compile libraries.spring_cloud_starter_eureka
     compile libraries.spring_cloud_starter_zuul
+    compile libraries.spring_cloud_starter_ribbon
+
     compile libraries.spring_boot_starter_actuator
     compile libraries.spring_boot_starter_web
     compile libraries.spring_boot_starter_websocket
     compile libraries.spring_boot_starter_thymeleaf
+
     compile libraries.spring_security_web
     compile libraries.spring_security_config
+
     compile libraries.tomcat_coyote
     compile libraries.tomcat_embed_core
-    compile libraries.spring_cloud_starter_eureka
-    compile libraries.spring_cloud_starter_ribbon
     compile libraries.jetty_websocket_client
     compile libraries.jjwt
 
