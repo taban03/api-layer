@@ -37,7 +37,7 @@ dependencies {
     implementation(project(':apiml-security-common'))
 
     implementation libraries.ribbon_eureka
-    //implementation libraries.spring_cloud_starter_zuul
+    implementation libraries.spring_cloud_starter_zuul
 
     implementation libraries.spring_boot_starter_actuator
     implementation libraries.spring_boot_starter_web
