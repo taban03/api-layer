@@ -3,7 +3,6 @@ dependencies {
 
     compile libraries.spring_boot_starter_web
     compile libraries.commons_validator
-    //compile libraries.spring_cloud_starter_eureka_server
     compile libraries.eureka_client
 
     compile libraries.jackson_databind

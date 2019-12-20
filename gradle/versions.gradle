@@ -40,7 +40,6 @@ ext {
     jsoupVersion = '1.8.3'
     httpCoreVersion = '4.4.10'
     snakeyamlVersion = '1.23'
-    //springHateoasVersion = '0.23.0.RELEASE'
     springRetryVersion = '1.2.2.RELEASE'
     jsonUnitVersion = '1.25.0'
     springFoxVersion = '2.9.2'
@@ -74,14 +73,12 @@ ext {
         spring_boot_starter_thymeleaf      : "org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}",
         spring_boot_devtools               : "org.springframework.boot:spring-boot-devtools:${springBootVersion}",
         spring_retry                       : "org.springframework.retry:spring-retry:${springRetryVersion}",
-        //spring_hateoas                     : "org.springframework.hateoas:spring-hateoas:${springHateoasVersion}",
 
-        spring_cloud_config_server         : "org.springframework.cloud:spring-cloud-config-server:${springCloudVersion}",
-        spring_cloud_starter_config        : "org.springframework.cloud:spring-cloud-starter-config:${springCloudVersion}",
+        //spring_cloud_config_server         : "org.springframework.cloud:spring-cloud-config-server:${springCloudVersion}",
+        //spring_cloud_starter_config        : "org.springframework.cloud:spring-cloud-starter-config:${springCloudVersion}",
         spring_cloud_starter_zuul          : "org.springframework.cloud:spring-cloud-starter-netflix-zuul:${springCloudVersion}",
         spring_cloud_starter_eureka        : "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}",
         spring_cloud_starter_eureka_server : "org.springframework.cloud:spring-cloud-starter-netflix-eureka-server:${springCloudVersion}",
-        //spring_cloud_starter_ribbon        : "org.springframework.cloud:spring-cloud-starter-netflix-ribbon:${springCloudVersion}",
 
         spring_security_web                : "org.springframework.security:spring-security-web:${springSecurityVersion}",
         spring_security_config             : "org.springframework.security:spring-security-config:${springSecurityVersion}",

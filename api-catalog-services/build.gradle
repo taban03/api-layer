@@ -32,25 +32,22 @@ gitProperties {
 }
 
 dependencies {
-    //compile(project(':common-service-core'))
-    compile(project(':apiml-common'))
-    compile(project(':security-service-client-spring'))
-    //compile(project(':integration-enabler-spring'))
-    compile(project(':onboarding-enabler-spring-v2'))
+    implementation(project(':security-service-client-spring'))
+    implementation(project(':onboarding-enabler-spring-v2'))
 
     compileOnly libraries.lombok
 
-    compile libraries.spring_boot_starter_web
-    compile libraries.spring_boot_starter_actuator
-    compile libraries.spring_boot_configuration_processor
-    compile libraries.spring_boot_starter_webflux
-    compile libraries.spring_retry
-    compile libraries.swagger_core
-    compile libraries.swagger3_core
-    compile libraries.json_path
-    compile libraries.apache_commons_lang3
-    compile libraries.spring_boot_starter_thymeleaf
-    compile libraries.apache_velocity
+    implementation libraries.spring_boot_starter_web
+    implementation libraries.spring_boot_starter_actuator
+    implementation libraries.spring_boot_configuration_processor
+    implementation libraries.spring_boot_starter_webflux
+    implementation libraries.spring_retry
+    implementation libraries.swagger_core
+    implementation libraries.swagger3_core
+    implementation libraries.json_path
+    implementation libraries.apache_commons_lang3
+    implementation libraries.spring_boot_starter_thymeleaf
+    implementation libraries.apache_velocity
 
     testCompile libraries.rest_assured
     testCompile libraries.spring_mock_mvc

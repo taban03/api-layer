@@ -6,8 +6,6 @@ dependencies {
     implementation libraries.jackson_databind
     implementation libraries.lombok
 
-    //api libraries.eureka_client
-
     compileOnly libraries.javax_servlet_api
 
     testCompile libraries.junit
