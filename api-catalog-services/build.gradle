@@ -41,6 +41,7 @@ dependencies {
     implementation libraries.spring_boot_starter_actuator
     implementation libraries.spring_boot_configuration_processor
     implementation libraries.spring_boot_starter_webflux
+    implementation "org.springframework.boot:spring-boot-starter-aop:2.0.4.RELEASE"
     implementation libraries.spring_retry
     implementation libraries.swagger_core
     implementation libraries.swagger3_core
