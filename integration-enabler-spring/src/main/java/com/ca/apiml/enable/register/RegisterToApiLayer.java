@@ -14,7 +14,6 @@ import com.ca.apiml.enable.config.SslConfigBean;
 import com.ca.mfaas.eurekaservice.client.ApiMediationClient;
 import com.ca.mfaas.eurekaservice.client.config.ApiMediationServiceConfig;
 import com.ca.mfaas.eurekaservice.client.config.Ssl;
-import com.ca.mfaas.eurekaservice.client.impl.ApiMediationClientImpl;
 
 import com.ca.mfaas.exception.ServiceDefinitionException;
 import com.ca.mfaas.message.core.MessageService;
@@ -34,10 +33,15 @@ public class RegisterToApiLayer {
     private final ApiMediationServiceConfigBean config;
     private final SslConfigBean ssl;
     private final ApimlLogger logger;
+    private final ApiMediationClient apiMediationClient;
 
-    public RegisterToApiLayer(ApiMediationServiceConfigBean config, SslConfigBean ssl, MessageService messageService) {
+    public RegisterToApiLayer(ApiMediationServiceConfigBean config,
+                              SslConfigBean ssl,
+                              ApiMediationClient apiMediationClient,
+                              MessageService messageService) {
         this.config = config;
         this.ssl = ssl;
+        this.apiMediationClient = apiMediationClient;
         this.logger = ApimlLogger.of(RegisterToApiLayer.class, messageService);
     }
 
@@ -47,15 +51,14 @@ public class RegisterToApiLayer {
     @Value("${apiml.enabled:false}")
     private boolean enabled;
 
-    @EventListener
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+    @EventListener(ContextRefreshedEvent.class)
+    public void onContextRefreshedEventEvent() {
         if (enabled) {
             register(config, ssl);
         }
     }
 
     private void register(ApiMediationServiceConfig config, Ssl ssl) {
-        ApiMediationClient apiMediationClient = new ApiMediationClientImpl();
         config.setSsl(ssl);
         //config.setEureka(new Eureka(null, null, ipAddress));
         logger.log("apiml.enabler.register.successful",
