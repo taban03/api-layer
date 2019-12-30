@@ -10,12 +10,16 @@
 package com.ca.mfaas.gateway.controllers;
 
 import com.ca.apiml.security.common.config.AuthConfigurationProperties;
+//import com.ca.mfaas.eurekaservice.model.InstanceInfo;
 import com.ca.mfaas.gateway.security.login.LoginProvider;
+import com.ca.mfaas.product.registry.EurekaClientWrapper;
 import com.ca.mfaas.product.version.BuildInfo;
 import com.ca.mfaas.product.version.BuildInfoDetails;
+import com.netflix.appinfo.InstanceInfo;
+//import com.netflix.discovery.DiscoveryClient;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
+//import org.springframework.cloud.client.ServiceInstance;
+//import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +38,8 @@ public class GatewayHomepageController {
 
     private static final String SUCCESS_ICON_NAME = "success";
 
-    private final DiscoveryClient discoveryClient;
+    //private final DiscoveryClient discoveryClient;
+    private final EurekaClientWrapper eurekaClientWrapper;
     private final AuthConfigurationProperties authConfigurationProperties;
 
     private String buildString;
@@ -67,12 +72,23 @@ public class GatewayHomepageController {
         String discoveryStatusText;
         String discoveryIconName;
 
-        List<ServiceInstance> discoveryInstances = getInstancesById("discovery");
+        List<InstanceInfo> discoveryInstances = getInstancesById("discovery");
         int discoveryCount = discoveryInstances.size();
         switch (discoveryCount) {
             case 0:
-                discoveryStatusText = "The Discovery Service is not running";
-                discoveryIconName = "danger";
+/*
+                discoveryInstances = eurekaClientWrapper.getEurekaClient().getInstancesById("discovery");
+                discoveryCount = discoveryInstances.size();
+                if (discoveryCount == 0) {
+*/
+                    discoveryStatusText = "The Discovery Service is not running";
+                    discoveryIconName = "danger";
+/*
+                } else {
+                    discoveryStatusText = "The Discovery Service is running";
+                    discoveryIconName = SUCCESS_ICON_NAME;
+                }
+*/
                 break;
             case 1:
                 discoveryStatusText = "The Discovery Service is running";
@@ -94,7 +110,7 @@ public class GatewayHomepageController {
         boolean authUp = true;
 
         if (!authConfigurationProperties.getProvider().equalsIgnoreCase(LoginProvider.DUMMY.toString())) {
-            authUp = !this.discoveryClient.getInstances(authConfigurationProperties.validatedZosmfServiceId()).isEmpty();
+            authUp = !this.eurekaClientWrapper.getEurekaClient().getInstancesById(authConfigurationProperties.validatedZosmfServiceId()).isEmpty();
         }
 
         if (authUp) {
@@ -112,7 +128,7 @@ public class GatewayHomepageController {
         String catalogIconName = "warning";
         boolean linkEnabled = false;
 
-        List<ServiceInstance> catalogInstances = getInstancesById("apicatalog");
+        List<InstanceInfo> catalogInstances = getInstancesById("apicatalog");
         int catalogCount = catalogInstances.size();
         if (catalogCount == 1) {
             linkEnabled = true;
@@ -127,11 +143,12 @@ public class GatewayHomepageController {
         model.addAttribute("catalogStatusText", catalogStatusText);
     }
 
-    private List<ServiceInstance> getInstancesById(String serviceId) {
-        return this.discoveryClient.getInstances(serviceId);
+    private List<InstanceInfo> getInstancesById(String serviceId) {
+        return eurekaClientWrapper.getEurekaClient().getInstancesByVipAddress(serviceId,
+            false);//getInstancesById(serviceId);
     }
 
-    private String getCatalogLink(ServiceInstance catalogInstance) {
+    private String getCatalogLink(InstanceInfo catalogInstance) {
         String gatewayUrl = catalogInstance.getMetadata().get(String.format("%s.ui_v1.%s", ROUTES, ROUTES_GATEWAY_URL));
         String serviceUrl = catalogInstance.getMetadata().get(String.format("%s.ui_v1.%s", ROUTES, ROUTES_SERVICE_URL));
         return gatewayUrl + serviceUrl;

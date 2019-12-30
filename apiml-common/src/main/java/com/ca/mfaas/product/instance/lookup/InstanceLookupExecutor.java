@@ -10,6 +10,7 @@
 package com.ca.mfaas.product.instance.lookup;
 
 import com.ca.mfaas.product.instance.InstanceNotFoundException;
+import com.ca.mfaas.product.registry.EurekaClientWrapper;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.shared.Application;
@@ -30,7 +31,7 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class InstanceLookupExecutor {
 
-    private final EurekaClient eurekaClient;
+    private final EurekaClientWrapper eurekaClientWrapper;
     private final ScheduledExecutorService executorService =
         Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "InstanceLookupExecutor-Thread"));
     private final int initialDelay;
@@ -39,14 +40,19 @@ public class InstanceLookupExecutor {
     /**
      * Constructor with predefined initial delay of 100ms and retry frequency of 5000ms
      *
-     * @param eurekaClient EurekaClient to use for search
+     * @param eurekaClientWrapper EurekaClientWrapper to use for search
      */
-    public InstanceLookupExecutor(EurekaClient eurekaClient) {
-        this(eurekaClient, 100, 5000);
+    public InstanceLookupExecutor(EurekaClientWrapper eurekaClientWrapper) {
+        this(eurekaClientWrapper, 100, 5000);
     }
 
     private InstanceInfo findEurekaInstance(String serviceId) {
-        Application application = eurekaClient.getApplication(serviceId);
+         EurekaClient eurekaClient = eurekaClientWrapper.getEurekaClient();
+        if (eurekaClient == null) {
+            throw new InstanceNotFoundException("Service '" + serviceId + "' can not be found. EurekaClient is null. Check if EurekaClient is enabled in configuration file (apiml.enabled: true).");
+        }
+
+        Application application = eurekaClientWrapper.getEurekaClient().getApplication(serviceId);
         if (application == null) {
             throw new InstanceNotFoundException("Service '" + serviceId + "' is not registered to Discovery Service");
         }

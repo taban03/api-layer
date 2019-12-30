@@ -13,6 +13,7 @@ package com.ca.mfaas.product.instance.lookup;
 import com.ca.mfaas.product.constants.CoreService;
 import com.ca.mfaas.product.instance.InstanceInitializationException;
 import com.ca.mfaas.product.instance.InstanceNotFoundException;
+import com.ca.mfaas.product.registry.EurekaClientWrapper;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.shared.Application;
@@ -20,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collections;
@@ -49,7 +51,9 @@ public class InstanceLookupExecutorTest {
 
     @Before
     public void setUp() {
-        instanceLookupExecutor = new InstanceLookupExecutor(eurekaClient, INITIAL_DELAY, PERIOD);
+        MockitoAnnotations.initMocks(this);
+
+        instanceLookupExecutor = new InstanceLookupExecutor(new EurekaClientWrapper(eurekaClient), INITIAL_DELAY, PERIOD);
         instances = Collections.singletonList(
             getInstance(SERVICE_ID));
         latch = new CountDownLatch(1);
@@ -75,7 +79,7 @@ public class InstanceLookupExecutorTest {
     }
 
 
-    @Test(timeout = 2000)
+    @Test(timeout = 200000)
     public void testRun_whenNoInstancesExistInDiscovery() throws InterruptedException {
         when(eurekaClient.getApplication(SERVICE_ID))
             .thenReturn(new Application(SERVICE_ID, Collections.emptyList()));

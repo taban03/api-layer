@@ -9,9 +9,10 @@
  */
 package com.ca.mfaas.apicatalog.health;
 
+import com.ca.mfaas.product.registry.EurekaClientWrapper;
 import com.ca.mfaas.product.constants.CoreService;
 import com.netflix.appinfo.InstanceInfo;
-import com.netflix.discovery.DiscoveryClient;
+import com.netflix.discovery.EurekaClient;
 import org.junit.Test;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
@@ -24,8 +25,8 @@ import static org.mockito.Mockito.when;
 
 public class ApiCatalogHealthIndicatorTest {
 
-    private final DiscoveryClient discoveryClient = mock(DiscoveryClient.class);
-    private final ApiCatalogHealthIndicator apiCatalogHealthIndicator = new ApiCatalogHealthIndicator(discoveryClient);
+    private final EurekaClient discoveryClient = mock(EurekaClient.class);
+    private final ApiCatalogHealthIndicator apiCatalogHealthIndicator = new ApiCatalogHealthIndicator(new EurekaClientWrapper(discoveryClient));
     private final Health.Builder builder = new Health.Builder();
 
     @Test

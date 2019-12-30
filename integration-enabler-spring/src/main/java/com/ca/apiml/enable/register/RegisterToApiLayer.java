@@ -19,8 +19,12 @@ import com.ca.mfaas.eurekaservice.client.impl.ApiMediationClientImpl;
 import com.ca.mfaas.exception.ServiceDefinitionException;
 import com.ca.mfaas.message.core.MessageService;
 import com.ca.mfaas.message.log.ApimlLogger;
+import com.ca.mfaas.product.registry.EurekaClientWrapper;
+//import com.netflix.discovery.EurekaClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -29,11 +33,15 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@Configuration
 @EnableConfigurationProperties(value = {ApiMediationServiceConfigBean.class, SslConfigBean.class})
 public class RegisterToApiLayer {
     private final ApiMediationServiceConfigBean config;
     private final SslConfigBean ssl;
     private final ApimlLogger logger;
+
+   // @Autowired
+    private EurekaClientWrapper eurekaClientWrapper = new EurekaClientWrapper();
 
     public RegisterToApiLayer(ApiMediationServiceConfigBean config, SslConfigBean ssl, MessageService messageService) {
         this.config = config;
@@ -54,17 +62,27 @@ public class RegisterToApiLayer {
         }
     }
 
+    /*public EurekaClient eurekaClient() {
+        return eurekaClientWrapper.getEurekaClient();
+    }*/
+
     private void register(ApiMediationServiceConfig config, Ssl ssl) {
         ApiMediationClient apiMediationClient = new ApiMediationClientImpl();
         config.setSsl(ssl);
-        //config.setEureka(new Eureka(null, null, ipAddress));
         logger.log("apiml.enabler.register.successful",
             config.getBaseUrl(), config.getServiceIpAddress(), config.getDiscoveryServiceUrls());
         log.debug("Registering to API Mediation Layer with settings: {}", config.toString());
         try {
             apiMediationClient.register(config);
+
+            eurekaClientWrapper.setEurekaClient(apiMediationClient.getEurekaClient());
         } catch (ServiceDefinitionException e) {
             logger.log(e.toString());
         }
+    }
+
+    @Bean
+    public EurekaClientWrapper eurekaClientWrapper() {
+        return eurekaClientWrapper;
     }
 }

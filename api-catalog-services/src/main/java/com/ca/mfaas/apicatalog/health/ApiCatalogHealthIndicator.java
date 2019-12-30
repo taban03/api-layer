@@ -9,6 +9,7 @@
  */
 package com.ca.mfaas.apicatalog.health;
 
+import com.ca.mfaas.product.registry.EurekaClientWrapper;
 import com.ca.mfaas.product.constants.CoreService;
 import com.netflix.discovery.EurekaClient;
 import lombok.RequiredArgsConstructor;
@@ -24,17 +25,22 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ApiCatalogHealthIndicator extends AbstractHealthIndicator {
 
-    private final EurekaClient discoveryClient;
+    private final EurekaClientWrapper eurekaClientWrapper;
 
     @Override
     protected void doHealthCheck(Health.Builder builder) {
         String gatewayServiceId = CoreService.GATEWAY.getServiceId();
 
-        boolean gatewayUp = !this.discoveryClient.getInstancesById(gatewayServiceId).isEmpty();
+        EurekaClient eurekaClient = getEurekaClient();
+        boolean gatewayUp = (eurekaClient == null) ? false : !eurekaClient.getInstancesById(gatewayServiceId).isEmpty();
         Status healthStatus = gatewayUp ? Status.UP : Status.DOWN;
 
         builder
             .status(healthStatus)
             .withDetail(gatewayServiceId, healthStatus.getCode());
+    }
+
+    private EurekaClient getEurekaClient() {
+        return eurekaClientWrapper.getEurekaClient();
     }
 }

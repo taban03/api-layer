@@ -12,8 +12,7 @@ package com.ca.apiml.security.client.config;
 import com.ca.mfaas.product.gateway.GatewayClient;
 import com.ca.mfaas.product.gateway.GatewayInstanceInitializer;
 import com.ca.mfaas.product.instance.lookup.InstanceLookupExecutor;
-import com.netflix.discovery.EurekaClient;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.ca.mfaas.product.registry.EurekaClientWrapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -23,18 +22,18 @@ import org.springframework.context.annotation.Configuration;
  * General configuration of security client
  */
 @Configuration
-@ComponentScan({"com.ca.apiml.security", "com.ca.mfaas.product.gateway"})
+@ComponentScan({"com.ca.apiml.security", "com.ca.mfaas.product"}) /*.gateway*/
 public class SecurityServiceConfiguration {
 
     @Bean
     public GatewayInstanceInitializer gatewayInstanceInitializer(
-        @Qualifier("eurekaClient") EurekaClient eurekaClient,
+        EurekaClientWrapper eurekaClientWrapper,
         ApplicationEventPublisher applicationEventPublisher,
         GatewayClient gatewayClient) {
 
 
         return new GatewayInstanceInitializer(
-            new InstanceLookupExecutor(eurekaClient),
+            new InstanceLookupExecutor(eurekaClientWrapper),
             applicationEventPublisher,
             gatewayClient);
     }

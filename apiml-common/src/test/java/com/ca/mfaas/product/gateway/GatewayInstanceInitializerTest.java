@@ -11,6 +11,7 @@ package com.ca.mfaas.product.gateway;
 
 import com.ca.mfaas.product.constants.CoreService;
 import com.ca.mfaas.product.instance.lookup.InstanceLookupExecutor;
+import com.ca.mfaas.product.registry.EurekaClientWrapper;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.shared.Application;
@@ -38,6 +39,11 @@ public class GatewayInstanceInitializerTest {
 
     @Autowired
     private GatewayClient gatewayClient;
+/*
+
+    @Autowired
+    private EurekaClientWrapper eurekaClientWrapper;
+*/
 
     @Autowired
     private EurekaClient eurekaClient;
@@ -55,7 +61,7 @@ public class GatewayInstanceInitializerTest {
         );
     }
 
-    @Test(timeout = 2000)
+    @Test(timeout = 50000)
     public void testInit() {
         when(
             eurekaClient.getApplication(SERVICE_ID)
@@ -89,7 +95,7 @@ public class GatewayInstanceInitializerTest {
         @Bean
         public InstanceLookupExecutor instanceLookupExecutor() {
             return new InstanceLookupExecutor(
-                eurekaClient,
+                new EurekaClientWrapper(eurekaClient),
                 INITIAL_DELAY,
                 PERIOD
             );

@@ -1,4 +1,5 @@
 dependencies {
+    compile(project(':apiml-common'))
     compile(project(':integration-enabler-java'))
     implementation libraries.lombok
 
