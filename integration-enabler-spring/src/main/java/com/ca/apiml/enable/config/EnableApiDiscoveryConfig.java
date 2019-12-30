@@ -9,6 +9,7 @@
  */
 package com.ca.apiml.enable.config;
 
+import com.ca.mfaas.eurekaservice.client.impl.ApiMediationClientImpl;
 import com.ca.mfaas.message.core.MessageService;
 import com.ca.mfaas.message.yaml.YamlMessageServiceInstance;
 import org.springframework.context.annotation.Bean;
@@ -17,11 +18,16 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(value = {"com.ca.apiml.enable"})
 public class EnableApiDiscoveryConfig {
 
-   @Bean
+    @Bean
     public MessageService messageServiceDiscovery() {
         MessageService messageService = YamlMessageServiceInstance.getInstance();
         messageService.loadMessages("/integration-enabler-spring-messages.yml");
 
         return messageService;
+    }
+
+    @Bean
+    public ApiMediationClientImpl apiMediationClient() {
+       return new ApiMediationClientImpl();
     }
 }

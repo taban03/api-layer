@@ -20,7 +20,6 @@ import com.ca.mfaas.exception.ServiceDefinitionException;
 import com.ca.mfaas.message.core.MessageService;
 import com.ca.mfaas.message.log.ApimlLogger;
 import com.ca.mfaas.product.registry.EurekaClientWrapper;
-//import com.netflix.discovery.EurekaClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -40,7 +39,6 @@ public class RegisterToApiLayer {
     private final SslConfigBean ssl;
     private final ApimlLogger logger;
 
-   // @Autowired
     private EurekaClientWrapper eurekaClientWrapper = new EurekaClientWrapper();
 
     public RegisterToApiLayer(ApiMediationServiceConfigBean config, SslConfigBean ssl, MessageService messageService) {
@@ -55,16 +53,12 @@ public class RegisterToApiLayer {
     @Value("${apiml.enabled:false}")
     private boolean enabled;
 
-    @EventListener
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+    @EventListener(ContextRefreshedEvent.class)
+    public void onContextRefreshedEventEvent() {
         if (enabled) {
             register(config, ssl);
         }
     }
-
-    /*public EurekaClient eurekaClient() {
-        return eurekaClientWrapper.getEurekaClient();
-    }*/
 
     private void register(ApiMediationServiceConfig config, Ssl ssl) {
         ApiMediationClient apiMediationClient = new ApiMediationClientImpl();
