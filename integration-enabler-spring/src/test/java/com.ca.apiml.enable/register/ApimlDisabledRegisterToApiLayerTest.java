@@ -44,7 +44,7 @@ public class ApimlDisabledRegisterToApiLayerTest {
     @Before
     public void setup() {
         registerToApiLayer = new RegisterToApiLayer(
-            apiMediationServiceConfigBean, sslConfigBean, apiMediationClient, null);
+            apiMediationServiceConfigBean, sslConfigBean, null);
     }
 
 

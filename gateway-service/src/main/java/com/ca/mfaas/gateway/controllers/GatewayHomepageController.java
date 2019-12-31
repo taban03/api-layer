@@ -10,16 +10,12 @@
 package com.ca.mfaas.gateway.controllers;
 
 import com.ca.apiml.security.common.config.AuthConfigurationProperties;
-//import com.ca.mfaas.eurekaservice.model.InstanceInfo;
 import com.ca.mfaas.gateway.security.login.LoginProvider;
 import com.ca.mfaas.product.registry.EurekaClientWrapper;
 import com.ca.mfaas.product.version.BuildInfo;
 import com.ca.mfaas.product.version.BuildInfoDetails;
 import com.netflix.appinfo.InstanceInfo;
-//import com.netflix.discovery.DiscoveryClient;
 import lombok.RequiredArgsConstructor;
-//import org.springframework.cloud.client.ServiceInstance;
-//import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +34,6 @@ public class GatewayHomepageController {
 
     private static final String SUCCESS_ICON_NAME = "success";
 
-    //private final DiscoveryClient discoveryClient;
     private final EurekaClientWrapper eurekaClientWrapper;
     private final AuthConfigurationProperties authConfigurationProperties;
 
@@ -76,19 +71,8 @@ public class GatewayHomepageController {
         int discoveryCount = discoveryInstances.size();
         switch (discoveryCount) {
             case 0:
-/*
-                discoveryInstances = eurekaClientWrapper.getEurekaClient().getInstancesById("discovery");
-                discoveryCount = discoveryInstances.size();
-                if (discoveryCount == 0) {
-*/
-                    discoveryStatusText = "The Discovery Service is not running";
-                    discoveryIconName = "danger";
-/*
-                } else {
-                    discoveryStatusText = "The Discovery Service is running";
-                    discoveryIconName = SUCCESS_ICON_NAME;
-                }
-*/
+                discoveryStatusText = "The Discovery Service is not running";
+                discoveryIconName = "danger";
                 break;
             case 1:
                 discoveryStatusText = "The Discovery Service is running";
