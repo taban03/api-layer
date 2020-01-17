@@ -80,7 +80,7 @@ properties(opts)
 
 pipeline {
     agent {
-        label 'apiml-jenkins-agent'
+        label 'apiml-jenkins-agent-swarm'
     }
 
     options {
@@ -171,7 +171,7 @@ pipeline {
                 stage('Build and unit test with coverage') {
                     steps {
                         timeout(time: 20, unit: 'MINUTES') {
-                            sh './gradlew build coverage'
+                            sh './gradlew build coverage --info'
                         }
                     }
                 }
